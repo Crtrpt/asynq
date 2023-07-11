@@ -1,0 +1,5 @@
+[book]
+authors = ["jingdor"]
+language = "en"
+multilingual = true
+src = "src"
