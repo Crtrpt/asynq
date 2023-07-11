@@ -1,0 +1,554 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Getting Started</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Basics</li><li class="chapter-item expanded "><a href="Getting-Started.html" class="active"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="Handler-Deep-Dive.html"><strong aria-hidden="true">2.</strong> Handler Deep Dive</a></li><li class="chapter-item expanded "><a href="Life-of-a-Task.html"><strong aria-hidden="true">3.</strong> Life of a Task</a></li><li class="chapter-item expanded "><a href="Signals.html"><strong aria-hidden="true">4.</strong> Signals</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced Topics</li><li class="chapter-item expanded "><a href="Queue-Priority.html"><strong aria-hidden="true">5.</strong> Queue Priority</a></li><li class="chapter-item expanded "><a href="Task-Retry.html"><strong aria-hidden="true">6.</strong> Task Retry</a></li><li class="chapter-item expanded "><a href="Task-Timeout-and-Cancelation.html"><strong aria-hidden="true">7.</strong> Timeout, Cancelation</a></li><li class="chapter-item expanded "><a href="Periodic-Tasks.html"><strong aria-hidden="true">8.</strong> Periodic Task</a></li><li class="chapter-item expanded "><a href="Dynamic-Periodic-Task.html"><strong aria-hidden="true">9.</strong> Periodic Task (Dynamic)</a></li><li class="chapter-item expanded "><a href="Rate-Limiting.html"><strong aria-hidden="true">10.</strong> Rate Limiting</a></li><li class="chapter-item expanded "><a href="Unique-Tasks.html"><strong aria-hidden="true">11.</strong> Unique Task</a></li><li class="chapter-item expanded "><a href="Task-Retention-and-Result.html"><strong aria-hidden="true">12.</strong> Task Retention and Result</a></li><li class="chapter-item expanded "><a href="Task-aggregation.html"><strong aria-hidden="true">13.</strong> Task Aggregation</a></li><li class="chapter-item expanded "><a href="Redis-Cluster.html"><strong aria-hidden="true">14.</strong> Redis Cluster</a></li><li class="chapter-item expanded "><a href="Automatic-Failover.html"><strong aria-hidden="true">15.</strong> Automatic Failover</a></li><li class="chapter-item expanded "><a href="Monitoring-and-Alerting.html"><strong aria-hidden="true">16.</strong> Monitoring and Alerting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h3 id="welcome-to-a-tour-of-asynq"><a class="header" href="#welcome-to-a-tour-of-asynq">Welcome to a Tour of Asynq!</a></h3>
+<p><img src="https://github.com/hibiken/asynq/raw/master/docs/assets/overview.png" alt="Task Queue Diagram" /></p>
+<p>In this tutorial, we are going to write two programs, <code>client</code> and <code>workers</code>.</p>
+<ul>
+<li><code>client.go</code> will create and schedule tasks to be processed asynchronously by the background workers.</li>
+<li><code>workers.go</code> will start multiple concurrent workers to process the tasks created by the client.</li>
+</ul>
+<p><strong>This guide assumes that you are running a Redis server at <code>localhost:6379</code></strong>.
+Before we start, make sure you have Redis installed and running.</p>
+<p>Let's start by creating our two main files.</p>
+<pre><code class="language-sh">mkdir quickstart &amp;&amp; cd quickstart
+go mod init asynq-quickstart
+mkdir client workers
+touch client/client.go workers/workers.go
+</code></pre>
+<p>And install <code>asynq</code> package.</p>
+<pre><code class="language-sh">go get -u github.com/hibiken/asynq
+</code></pre>
+<p>Before we start writing code, let's review a few core types that we'll use in both of our programs.</p>
+<h3 id="redis-connection-option"><a class="header" href="#redis-connection-option">Redis Connection Option</a></h3>
+<p>Asynq uses Redis as a message broker.<br />
+Both <code>client.go</code> and <code>workers.go</code> need to connect to Redis to write to and read from it. 
+We are going to use <code>RedisClientOpt</code> to specify the connection to a Redis server running locally.</p>
+<pre><code class="language-go">redisConnOpt := asynq.RedisClientOpt{
+    Addr: &quot;localhost:6379&quot;,
+    // Omit if no password is required
+    Password: &quot;mypassword&quot;,
+    // Use a dedicated db number for asynq.
+    // By default, Redis offers 16 databases (0..15)
+    DB: 0,
+}
+</code></pre>
+<h3 id="tasks"><a class="header" href="#tasks">Tasks</a></h3>
+<p>In <code>asynq</code>, a unit of work is encapsulated in a type called <code>Task</code>,
+which conceptually has two fields: <code>Type</code> and <code>Payload</code>.</p>
+<pre><code class="language-go">// Type is a string value that indicates the type of the task. 
+func (t *Task) Type() string
+
+// Payload is the data needed for task execution.
+func (t *Task) Payload() []byte
+</code></pre>
+<p>Now that we've taken a look at the core types, let's start writing our programs.</p>
+<h3 id="client-program"><a class="header" href="#client-program">Client Program</a></h3>
+<p>In <code>client.go</code>, we are going to create a few tasks and enqueue them using <code>asynq.Client</code>. </p>
+<p>To create a task, use <code>NewTask</code> function and pass type and payload for the task.</p>
+<p>The <a href="https://godoc.org/github.com/hibiken/asynq#Client.Enqueue"><code>Enqueue</code></a> method takes a task and any number of options.<br />
+Use <a href="https://godoc.org/github.com/hibiken/asynq#ProcessIn"><code>ProcessIn</code></a> or <a href="https://godoc.org/github.com/hibiken/asynq#ProcessAt"><code>ProcessAt</code></a> option to schedule tasks to be processed in the future.</p>
+<pre><code class="language-go">// Task payload for any email related tasks.
+type EmailTaskPayload struct {
+    // ID for the email recipient.
+    UserID int
+}
+
+// client.go
+func main() {
+    client := asynq.NewClient(asynq.RedisClientOpt{Addr: &quot;localhost:6379&quot;})
+
+    // Create a task with typename and payload.
+    payload, err := json.Marshal(EmailTaskPayload{UserID: 42})
+    if err != nil {
+        log.Fatal(err)
+    }
+    t1 := asynq.NewTask(&quot;email:welcome&quot;, payload)
+
+    t2 := asynq.NewTask(&quot;email:reminder&quot;, payload)
+
+    // Process the task immediately.
+    info, err := client.Enqueue(t1)
+    if err != nil {
+        log.Fatal(err)
+    }
+    log.Printf(&quot; [*] Successfully enqueued task: %+v&quot;, info)
+
+    // Process the task 24 hours later.
+    info, err = client.Enqueue(t2, asynq.ProcessIn(24*time.Hour))
+    if err != nil {
+        log.Fatal(err)
+    }
+    log.Printf(&quot; [*] Successfully enqueued task: %+v&quot;, info)
+}
+</code></pre>
+<p>That's all we need for the client program. </p>
+<h3 id="workers-program"><a class="header" href="#workers-program">Workers Program</a></h3>
+<p>In <code>workers.go</code>, we'll create a <code>asynq.Server</code> instance to start the workers.</p>
+<p><code>NewServer</code> function takes <code>RedisConnOpt</code> and <code>Config</code>.</p>
+<p><code>Config</code> is used to tune the server's task processing behavior.<br />
+You can take a look at the documentation on <a href="https://pkg.go.dev/github.com/hibiken/asynq#Config"><code>Config</code></a> to see all the available config options.</p>
+<p>To keep it simple, we are only going to specify the concurrency in this example.</p>
+<pre><code class="language-go">// workers.go
+func main() {
+    srv := asynq.NewServer(
+        asynq.RedisClientOpt{Addr: &quot;localhost:6379&quot;},
+        asynq.Config{Concurrency: 10},
+    )
+
+    // NOTE: We'll cover what this `handler` is in the section below.
+    if err := srv.Run(handler); err != nil {
+        log.Fatal(err)
+    }
+}
+</code></pre>
+<p>The argument to <code>(*Server).Run</code> is an interface <code>asynq.Handler</code> which has one method <code>ProcessTask</code>.</p>
+<pre><code class="language-go">type Handler interface {
+    // ProcessTask should return nil if the task was processed successfully.
+    // If ProcessTask returns a non-nil error or panics, the task will be retried again later.
+    ProcessTask(context.Context, *Task) error
+}
+</code></pre>
+<p>The simplest way to implement a handler is to define a function with the same signature and use <code>asynq.HandlerFunc</code> adapter type when passing it to <code>Run</code>.</p>
+<pre><code class="language-go">func handler(ctx context.Context, t *asynq.Task) error {
+    switch t.Type() {
+    case &quot;email:welcome&quot;:
+        var p EmailTaskPayload
+        if err := json.Unmarshal(t.Payload(), &amp;p); err != nil {
+            return err
+        }
+        log.Printf(&quot; [*] Send Welcome Email to User %d&quot;, p.UserID)
+
+    case &quot;email:reminder&quot;:
+        var p EmailTaskPayload
+        if err := json.Unmarshal(t.Payload(), &amp;p); err != nil {
+            return err
+        }
+        log.Printf(&quot; [*] Send Reminder Email to User %d&quot;, p.UserID)
+
+    default:
+        return fmt.Errorf(&quot;unexpected task type: %s&quot;, t.Type())
+    }
+    return nil
+}
+
+func main() {
+    srv := asynq.NewServer(
+        asynq.RedisClientOpt{Addr: &quot;localhost:6379&quot;},
+        asynq.Config{Concurrency: 10},
+    )
+
+    // Use asynq.HandlerFunc adapter for a handler function
+    if err := srv.Run(asynq.HandlerFunc(handler)); err != nil {
+        log.Fatal(err)
+    }
+}
+</code></pre>
+<p>We could keep adding switch cases to this handler function, but in a realistic application, it's convenient to define the logic for each case in a separate function.</p>
+<p>To refactor our code, let's use <code>ServeMux</code> to create our handler.
+Just like the <code>ServeMux</code> from <code>&quot;net/http&quot;</code> package, you register a handler by calling <code>Handle</code> or <code>HandleFunc</code>. <code>ServeMux</code> satisfies the <code>Handler</code> interface, so that you can pass it to <code>(*Server).Run</code>. </p>
+<pre><code class="language-go">// workers.go
+func main() {
+    srv := asynq.NewServer(
+        asynq.RedisClientOpt{Addr: &quot;localhost:6379&quot;},
+        asynq.Config{Concurrency: 10},
+    )
+
+    mux := asynq.NewServeMux()
+    mux.HandleFunc(&quot;email:welcome&quot;, sendWelcomeEmail)
+    mux.HandleFunc(&quot;email:reminder&quot;, sendReminderEmail)
+
+    if err := srv.Run(mux); err != nil {
+        log.Fatal(err)
+    }
+}
+
+func sendWelcomeEmail(ctx context.Context, t *asynq.Task) error {
+    var p EmailTaskPayload
+    if err := json.Unmarshal(t.Payload(), &amp;p); err != nil {
+        return err
+    }
+    log.Printf(&quot; [*] Send Welcome Email to User %d&quot;, p.UserID)
+    return nil
+}
+
+func sendReminderEmail(ctx context.Context, t *asynq.Task) error {
+    var p EmailTaskPayload
+    if err := json.Unmarshal(t.Payload(), &amp;p); err != nil {
+        return err
+    }
+    log.Printf(&quot; [*] Send Reminder Email to User %d&quot;, p.UserID)
+    return nil
+}
+</code></pre>
+<p>Now that we've extracted functions to handle each task type, the code looks a bit more organized.<br />
+However, the code is a bit too implicit, we have these string values for task types and payload types that should be encapsulated in a cohesive package. Let's refactor our code by writing a package that encapsulates task creations and handling. We'll simply create a package called <code>task</code>.</p>
+<pre><code class="language-sh">mkdir task &amp;&amp; touch task/task.go
+</code></pre>
+<pre><code class="language-go">package task
+
+import (
+    &quot;context&quot;
+    &quot;fmt&quot;
+   
+    &quot;github.com/hibiken/asynq&quot;
+)
+
+// A list of task types.
+const (
+    TypeWelcomeEmail  = &quot;email:welcome&quot;
+    TypeReminderEmail = &quot;email:reminder&quot;
+)
+
+// Task payload for any email related tasks.
+type emailTaskPayload struct {
+    // ID for the email recipient.
+    UserID int
+}
+
+func NewWelcomeEmailTask(id int) (*asynq.Task, error) {
+    payload, err := json.Marshal(emailTaskPayload{UserID: id})
+    if err != nil {
+        return nil, err
+    }
+    return asynq.NewTask(TypeWelcomeEmail, payload), nil
+}
+
+func NewReminderEmailTask(id int) (*asynq.Task, error) {
+    payload, err := json.Marshal(emailTaskPayload{UserID: id})
+    if err != nil {
+        return nil, err
+    }
+    return asynq.NewTask(TypeReminderEmail, payload), nil
+}
+
+func HandleWelcomeEmailTask(ctx context.Context, t *asynq.Task) error {
+    var p emailTaskPayload  
+    if err := json.Unmarshal(t.Payload(), &amp;p); err != nil {
+        return err
+    }
+    log.Printf(&quot; [*] Send Welcome Email to User %d&quot;, p.UserID)
+    return nil
+}
+
+func HandleReminderEmailTask(ctx context.Context, t *asynq.Task) error {
+    var p emailTaskPayload  
+    if err := json.Unmarshal(t.Payload(), &amp;p); err != nil {
+        return err
+    }
+    log.Printf(&quot; [*] Send Reminder Email to User %d&quot;, p.UserID)
+    return nil
+}
+</code></pre>
+<p>And now we can import this package in both <code>client.go</code> and <code>workers.go</code>.</p>
+<pre><code class="language-go">// client.go
+func main() {
+    client := asynq.NewClient(asynq.RedisClientOpt{Addr: &quot;localhost:6379&quot;})
+
+    t1, err := task.NewWelcomeEmailTask(42)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    t2, err := task.NewReminderEmailTask(42)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Process the task immediately.
+    info, err := client.Enqueue(t1)
+    if err != nil {
+        log.Fatal(err)
+    }
+    log.Printf(&quot; [*] Successfully enqueued task: %+v&quot;, info)
+
+    // Process the task 24 hours later.
+    info, err = client.Enqueue(t2, asynq.ProcessIn(24*time.Hour))
+    if err != nil {
+        log.Fatal(err)
+    }
+    log.Printf(&quot; [*] Successfully enqueued task: %+v&quot;, info)
+}
+</code></pre>
+<pre><code class="language-go">// workers.go
+func main() {
+    srv := asynq.NewServer(
+        asynq.RedisClientOpt{Addr: &quot;localhost:6379&quot;},
+        asynq.Config{Concurrency: 10},
+    )
+
+    mux := asynq.NewServeMux()
+    mux.HandleFunc(task.TypeWelcomeEmail, task.HandleWelcomeEmailTask)
+    mux.HandleFunc(task.TypeReminderEmail, task.HandleReminderEmailTask)
+
+    if err := srv.Run(mux); err != nil {
+        log.Fatal(err)
+    }
+}
+</code></pre>
+<p>And now the code looks much nicer!</p>
+<h3 id="running-the-programs"><a class="header" href="#running-the-programs">Running the Programs</a></h3>
+<p>Now that we have both <code>client</code> and <code>workers</code>, we can run both programs.
+Let's run the <code>client</code> program to create and schedule tasks.</p>
+<pre><code class="language-sh">go run client/client.go
+</code></pre>
+<p>This will create two tasks: One that should be processed immediately and another to be processed 24 hours later.</p>
+<p>Let's use <code>asynq</code> CLI to inspect the tasks.</p>
+<pre><code class="language-sh">asynq dash
+</code></pre>
+<p>You should be able to see that there's one task in <strong>Enqueued</strong> state and another in <strong>Scheduled</strong> state.</p>
+<p><strong>Note</strong>: To learn more about the meaning of each state, check out <a href="https://github.com/hibiken/asynq/wiki/Life-of-a-Task">Life of a Task</a>.</p>
+<p>And finally, let's start the <code>workers</code> program to process tasks.</p>
+<pre><code class="language-sh">go run workers/workers.go
+</code></pre>
+<p><strong>Note</strong>: This will not exit until you send a signal to terminate the program. See <a href="https://github.com/hibiken/asynq/wiki/Signals">Signal Wiki page</a> for best practice on how to safely terminate background workers.</p>
+<p>You should be able to see some text printed in your terminal indicating that the task was processed successfully.</p>
+<p>You can run the <code>client</code> program again to see how workers pick up the tasks and process them.</p>
+<h3 id="task-retry"><a class="header" href="#task-retry">Task Retry</a></h3>
+<p>It's not uncommon that a task doesn't get processed successfully in the first attempt. By default, a failed task will be retried with exponential backoff up to 25 times. 
+Let's update our handler to return an error to simulate an unsuccessful scenario.</p>
+<pre><code class="language-go">// tasks.go
+func HandleWelcomeEmailTask(ctx context.Context, t *asynq.Task) error {
+    var p emailTaskPayload
+    if err := json.Unmarshal(t.Payload(), &amp;p); err != nil {
+        return err
+    }
+    log.Printf(&quot; [*] Attempting to Send Welcome Email to User %d...&quot;, p.UserID)
+    return fmt.Errorf(&quot;could not send email to the user&quot;) // &lt;-- Return error 
+}
+</code></pre>
+<p>Let's restart our workers program and enqueue a task.</p>
+<pre><code class="language-sh">go run workers/workers.go
+
+go run client/client.go
+</code></pre>
+<p>If you are running <code>asynq dash</code>, you should be able to see that there's a task in the <strong>Retry</strong> state (by navigating to the queue details view and highlighting the &quot;retry&quot; tab).</p>
+<p>To inspect which tasks are in retry state, you can also run</p>
+<pre><code class="language-sh">asynq task ls --queue=default --state=retry
+</code></pre>
+<p>This will list all the task that will be retried in the future. The output includes ETA of the task's next execution. </p>
+<p>Once a task exhausts its retry count, the task will transition to the <strong>Archived</strong> state and won't be retried (You can still manually run archived tasks using CLI or WebUI tool). </p>
+<p>Let's fix our handler before we wrap up this tutorial.</p>
+<pre><code class="language-go">func HandleWelcomeEmailTask(ctx context.Context, t *asynq.Task) error {
+    var p emailTaskPayload
+    if err := json.Unmarshal(t.Payload(), &amp;p); err != nil {
+        return err
+    }
+    log.Printf(&quot; [*] Send Welcome Email to User %d&quot;, p.UserID)
+    return nil 
+}
+</code></pre>
+<p>Now that we fixed the handler, task will be processed successfully in the next attempt :)</p>
+<p>This was a whirlwind tour of <code>asynq</code> basics. To learn more about all of its features such as <strong><a href="https://github.com/hibiken/asynq/wiki/Queue-Priority">priority queues</a></strong> and <strong><a href="https://github.com/hibiken/asynq/wiki/Task-Retry">custom retry</a></strong>, see our <a href="https://github.com/hibiken/asynq/wiki">Wiki page</a>.</p>
+<p>Thanks for reading!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+                            <a rel="next" href="Handler-Deep-Dive.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+                    <a rel="next" href="Handler-Deep-Dive.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

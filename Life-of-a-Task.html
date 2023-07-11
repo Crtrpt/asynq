@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Life of a Task</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Basics</li><li class="chapter-item expanded "><a href="Getting-Started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="Handler-Deep-Dive.html"><strong aria-hidden="true">2.</strong> Handler Deep Dive</a></li><li class="chapter-item expanded "><a href="Life-of-a-Task.html" class="active"><strong aria-hidden="true">3.</strong> Life of a Task</a></li><li class="chapter-item expanded "><a href="Signals.html"><strong aria-hidden="true">4.</strong> Signals</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced Topics</li><li class="chapter-item expanded "><a href="Queue-Priority.html"><strong aria-hidden="true">5.</strong> Queue Priority</a></li><li class="chapter-item expanded "><a href="Task-Retry.html"><strong aria-hidden="true">6.</strong> Task Retry</a></li><li class="chapter-item expanded "><a href="Task-Timeout-and-Cancelation.html"><strong aria-hidden="true">7.</strong> Timeout, Cancelation</a></li><li class="chapter-item expanded "><a href="Periodic-Tasks.html"><strong aria-hidden="true">8.</strong> Periodic Task</a></li><li class="chapter-item expanded "><a href="Dynamic-Periodic-Task.html"><strong aria-hidden="true">9.</strong> Periodic Task (Dynamic)</a></li><li class="chapter-item expanded "><a href="Rate-Limiting.html"><strong aria-hidden="true">10.</strong> Rate Limiting</a></li><li class="chapter-item expanded "><a href="Unique-Tasks.html"><strong aria-hidden="true">11.</strong> Unique Task</a></li><li class="chapter-item expanded "><a href="Task-Retention-and-Result.html"><strong aria-hidden="true">12.</strong> Task Retention and Result</a></li><li class="chapter-item expanded "><a href="Task-aggregation.html"><strong aria-hidden="true">13.</strong> Task Aggregation</a></li><li class="chapter-item expanded "><a href="Redis-Cluster.html"><strong aria-hidden="true">14.</strong> Redis Cluster</a></li><li class="chapter-item expanded "><a href="Automatic-Failover.html"><strong aria-hidden="true">15.</strong> Automatic Failover</a></li><li class="chapter-item expanded "><a href="Monitoring-and-Alerting.html"><strong aria-hidden="true">16.</strong> Monitoring and Alerting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>Asynq tasks go through a number of states in their lifetime. This page documents a life of a task, from the task's creation to its deletion.</p>
+<h2 id="task-lifecycle"><a class="header" href="#task-lifecycle">Task Lifecycle</a></h2>
+<p>When you enqueue a task, <code>asynq</code> manages the task internally to make sure that a handler gets invoked with the task at the specified time. In the process, the task can go through different lifecycle states.</p>
+<p>Here's the list of different lifecycle states:</p>
+<ul>
+<li><strong>Scheduled</strong> : task is waiting to be processed in the future (<em>Only applies to tasks with <code>ProcessAt</code> or <code>ProcessIn</code> option</em>).</li>
+<li><strong>Pending</strong> : task is ready to be processed and will be picked up by a free worker.</li>
+<li><strong>Active</strong> : task is being processed by a worker (i.e. handler is invoked with the task).</li>
+<li><strong>Retry</strong> : worker failed to process the task and the task is waiting to be retried in the future.</li>
+<li><strong>Archived</strong> : task reached its max retry and stored in an archive for manual inspection.</li>
+<li><strong>Completed</strong>: task was successfully processed and retained until retention TTL expires (<em>Only applies to tasks with <code>Retention</code> option</em>).</li>
+</ul>
+<p>Let's use an example to look at different lifecycle states.</p>
+<pre><code class="language-go">// Task 1 : Scheduled to be processed 24 hours later.
+client.Enqueue(task1, asynq.ProcessIn(24*time.Hour))
+
+// Task 2 : Enqueued to be processed immediately.
+client.Enqueue(task2)
+
+// Task 3: Enqueued with a Retention option.
+client.Enqueue(task3, asynq.Retention(2*time.Hour))
+</code></pre>
+<p>In this example, <code>task1</code> will stay in the <em>scheduled</em> state for the next 24 hours. After 24 hours, it will transition to the <em>pending</em> state and then to the <em>active</em> state. If the task was processed successfully then the task data is removed from Redis. If the task was <em>NOT</em> processed successfully (i.e. handler returned an error OR panicked), then the task will transition to the <em>retry</em> state to be retried later.
+<a href="https://github.com/hibiken/asynq/wiki/Task-Retry#customize-retry-delay">After some delay</a>, the task will transition to the <em>pending</em> state again and then to the <em>active</em>. This loop will continues until either the task gets processed successfully OR the task exhausts all of its retry count. In the latter case, the task will transition to the <em>archived</em> state.</p>
+<p>The only difference between <code>task2</code> and <code>task1</code> in the example is that <code>task2</code> will skip the <strong>scheduled</strong> state and goes directly to the <strong>pending</strong> state. </p>
+<p><code>task3</code> is enqueued with a <code>Retention</code> option of 2 hours. This means that after task3 gets processed successfully by a worker, the task will remain in the queue in the <strong>completed</strong> state for 2 hours before it gets deleted from the queue. By default, if a task doesn't have retention option set, the task will be deleted immediately after completion.</p>
+<p>The diagram below shows the state transitions. </p>
+<pre><code class="language-txt">+-------------+            +--------------+          +--------------+           +-------------+
+|             |            |              |          |              | Success   |             |
+|  Scheduled  |-----------&gt;|   Pending    |---------&gt;|    Active    |---------&gt; |  Completed  |
+|  (Optional) |            |              |          |              |           |  (Optional) |
++-------------+            +--------------+          +--------------+           +-------------+
+                                  ^                       |                            |
+                                  |                       |                            | Deletion
+                                  |                       | Failed                     |
+                                  |                       |                            V
+                                  |                       |
+                                  |                       |
+                           +------+-------+               |        +--------------+
+                           |              |               |        |              |
+                           |    Retry     |&lt;--------------+-------&gt;|   Archived   |
+                           |              |                        |              |
+                           +--------------+                        +--------------+
+
+
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="Handler-Deep-Dive.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="Signals.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="Handler-Deep-Dive.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="Signals.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

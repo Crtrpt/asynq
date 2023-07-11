@@ -1,0 +1,416 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Redis Cluster</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Basics</li><li class="chapter-item expanded "><a href="Getting-Started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="Handler-Deep-Dive.html"><strong aria-hidden="true">2.</strong> Handler Deep Dive</a></li><li class="chapter-item expanded "><a href="Life-of-a-Task.html"><strong aria-hidden="true">3.</strong> Life of a Task</a></li><li class="chapter-item expanded "><a href="Signals.html"><strong aria-hidden="true">4.</strong> Signals</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced Topics</li><li class="chapter-item expanded "><a href="Queue-Priority.html"><strong aria-hidden="true">5.</strong> Queue Priority</a></li><li class="chapter-item expanded "><a href="Task-Retry.html"><strong aria-hidden="true">6.</strong> Task Retry</a></li><li class="chapter-item expanded "><a href="Task-Timeout-and-Cancelation.html"><strong aria-hidden="true">7.</strong> Timeout, Cancelation</a></li><li class="chapter-item expanded "><a href="Periodic-Tasks.html"><strong aria-hidden="true">8.</strong> Periodic Task</a></li><li class="chapter-item expanded "><a href="Dynamic-Periodic-Task.html"><strong aria-hidden="true">9.</strong> Periodic Task (Dynamic)</a></li><li class="chapter-item expanded "><a href="Rate-Limiting.html"><strong aria-hidden="true">10.</strong> Rate Limiting</a></li><li class="chapter-item expanded "><a href="Unique-Tasks.html"><strong aria-hidden="true">11.</strong> Unique Task</a></li><li class="chapter-item expanded "><a href="Task-Retention-and-Result.html"><strong aria-hidden="true">12.</strong> Task Retention and Result</a></li><li class="chapter-item expanded "><a href="Task-aggregation.html"><strong aria-hidden="true">13.</strong> Task Aggregation</a></li><li class="chapter-item expanded "><a href="Redis-Cluster.html" class="active"><strong aria-hidden="true">14.</strong> Redis Cluster</a></li><li class="chapter-item expanded "><a href="Automatic-Failover.html"><strong aria-hidden="true">15.</strong> Automatic Failover</a></li><li class="chapter-item expanded "><a href="Monitoring-and-Alerting.html"><strong aria-hidden="true">16.</strong> Monitoring and Alerting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>This wiki page describes how to use Redis Cluster as a message broker with Asynq.
+This wiki assumes that you've read <a href="https://redis.io/topics/cluster-tutorial">Redis Cluster Tutorial</a>, and you have 6 instance Redis Cluster running locally as described in the tutorial.</p>
+<h3 id="advantages-of-using-redis-cluster"><a class="header" href="#advantages-of-using-redis-cluster">Advantages of using Redis Cluster</a></h3>
+<p>With Redis cluster, you get</p>
+<ul>
+<li>Ability to easily shard data across multiple Redis nodes</li>
+<li>Ability to stay available when some nodes are failing</li>
+<li>Ability to automatically failover</li>
+</ul>
+<h3 id="overview"><a class="header" href="#overview">Overview</a></h3>
+<p><img src="https://github.com/hibiken/asynq/raw/master/docs/assets/cluster.png" alt="Cluster Queue Diagram" /></p>
+<p>Asynq shards data by queue.<br />
+In the above diagram, we have 6-instance Redis Cluster (3 masters, 3 slaves) and 4 queues (q1, q2, q3, q4).</p>
+<ul>
+<li>Master1 (and its replica Slave1) hosts q1 and q2.</li>
+<li>Master2 (and its replica Slave2) hosts q3.</li>
+<li>Master3 (and its replica Slave3) hosts q4.</li>
+</ul>
+<p>When you enqueue a task using <code>asynq.Client</code> you can specify the queue with the <code>Queue</code> option.<br />
+The enqueued tasks will be consumed by <code>asynq.Server</code>(s) that are pulling tasks from those queues.</p>
+<h3 id="tutorial"><a class="header" href="#tutorial">Tutorial</a></h3>
+<p>In this section, we are going to look at how to use Redis Cluster as a message broker with Asynq.<br />
+We assume that you are running 6-instance Redis cluster on port 7000-7005 as described in this <a href="https://redis.io/topics/cluster-tutorial">Redis Cluster Tutorial</a>.<br />
+Here's an example <code>redis.conf</code> file:</p>
+<pre><code class="language-txt">port 7000
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 5000
+appendonly yes
+</code></pre>
+<p>Next, we are going to create two binaries: client and worker.</p>
+<pre><code class="language-sh">go mod init asynq-redis-cluster-quickstart
+mkdir client worker
+touch client/client.go worker/worker.go
+</code></pre>
+<p>In <code>client.go</code>, we are going to create a new <code>asynq.Client</code> and specify how to connect to Redis Cluster by passing <code>RedisClusterClientOpt</code>.</p>
+<pre><code class="language-go">client := asynq.NewClient(asynq.RedisClusterClientOpt{
+    Addrs: []string{&quot;:7000&quot;, &quot;:7001&quot;, &quot;:7002&quot;, &quot;:7003&quot;, &quot;:7004&quot;, &quot;:7005&quot;},
+})
+</code></pre>
+<p>Once we have the client, we are going to create tasks and enqueue them to three different queues: </p>
+<ul>
+<li>notifications</li>
+<li>webhooks</li>
+<li>images</li>
+</ul>
+<pre><code class="language-go">// client.go
+
+package main
+
+import (
+    &quot;fmt&quot;
+    &quot;log&quot;
+
+    &quot;github.com/hibiken/asynq&quot;
+)
+
+// List of queue names.
+const (
+     QueueNotifications = &quot;notifications&quot;
+     QueueWebhooks      = &quot;webhooks&quot;
+     QueueImages        = &quot;images&quot;
+)
+
+func main() {
+    client := asynq.NewClient(asynq.RedisClusterClientOpt{
+        Addrs: []string{&quot;:7000&quot;, &quot;:7001&quot;, &quot;:7002&quot;, &quot;:7003&quot;, &quot;:7004&quot;, &quot;:7005&quot;},
+    })
+    defer client.Close()
+
+    // Create &quot;notifications:email&quot; task and enqueue it to &quot;notifications&quot; queue.
+    task := asynq.NewTask(&quot;notifications:email&quot;, map[string]interface{}{&quot;to&quot;: 123, &quot;from&quot;: 456})
+    res, err := client.Enqueue(task, asynq.Queue(QueueNotifications))
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Printf(&quot;successfully enqueued: %+v\n&quot;, res)
+
+    // Create &quot;webhooks:sync&quot; task and enqueue it to &quot;webhooks&quot; queue.
+    task = asynq.NewTask(&quot;webhooks:sync&quot;, map[string]interface{}{&quot;data&quot;: 123})
+    res, err = client.Enqueue(task, asynq.Queue(QueueWebhooks))
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Printf(&quot;successfully enqueued: %+v\n&quot;, res)
+
+    // Create &quot;images:resize&quot; task and enqueue it to &quot;images&quot; queue.
+    task = asynq.NewTask(&quot;images:resize&quot;, map[string]interface{}{&quot;src&quot;: &quot;some/path/to/image&quot;})
+    res, err = client.Enqueue(task, asynq.Queue(QueueImages))
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Printf(&quot;successfully enqueued: %+v\n&quot;, res)
+}
+</code></pre>
+<p>Let's run this to enqueue three tasks.</p>
+<pre><code class="language-sh">go run client/client.go
+</code></pre>
+<p>Now let's move on to the worker to consume those tasks.
+In <code>worker.go</code>, we are going to create a <code>asynq.Server</code> that consumes tasks from the three queues.
+Again, we'll use <code>RedisClusterClientOpt</code> to connect to our Redis Cluster.</p>
+<pre><code class="language-go">// worker.go
+
+package main
+
+import (
+    &quot;context&quot;
+    &quot;fmt&quot;
+    &quot;log&quot;
+
+    &quot;github.com/hibiken/asynq&quot;
+)
+
+func main() {
+    redisConnOpt := asynq.RedisClusterClientOpt{
+        Addrs: []string{&quot;:7000&quot;, &quot;:7001&quot;, &quot;:7002&quot;, &quot;:7003&quot;, &quot;:7004&quot;, &quot;:7005&quot;},
+    }
+
+    srv := asynq.NewServer(redisConnOpt, asynq.Config{
+        Concurrency: 20,
+        // we'll give each queue the same priority number here.
+        Queues: map[string]int{
+            &quot;notifications&quot;: 1,
+            &quot;webhooks&quot;:      1,
+            &quot;images&quot;:        1,
+        },
+    })
+
+    mux := asynq.NewServeMux()
+    mux.HandleFunc(&quot;notifications:email&quot;, handleEmailTask)
+    mux.HandleFunc(&quot;webhooks:sync&quot;, handleWebhookSyncTask)
+    mux.HandleFunc(&quot;images:resize&quot;, handleImageResizeTask)
+
+    if err := srv.Run(mux); err != nil {
+        log.Fatalf(&quot;Could not start a server: %v&quot;, err)
+    }
+}
+
+func handleEmailTask(ctx context.Context, t *asynq.Task) error {
+    to, err := t.Payload.GetInt(&quot;to&quot;)
+    if err != nil {
+        return err
+    }
+    from, err := t.Payload.GetInt(&quot;from&quot;)
+    if err != nil {
+        return err
+    }
+    fmt.Printf(&quot;Send email from %d to %d\n&quot;, from, to)
+    return nil
+}
+
+func handleWebhookSyncTask(ctx context.Context, t *asynq.Task) error {
+    data, err := t.Payload.GetInt(&quot;data&quot;)
+    if err != nil {
+        return err
+    }
+    fmt.Printf(&quot;Handle webhook task: %d\n&quot;, data)
+    return nil
+}
+
+func handleImageResizeTask(ctx context.Context, t *asynq.Task) error {
+    src, err := t.Payload.GetString(&quot;src&quot;)
+    if err != nil {
+        return err
+    }
+    fmt.Printf(&quot;Resize image: %s\n&quot;, src)
+    return nil
+}
+</code></pre>
+<p>Let's run this worker server to processed the three tasks we created earlier.</p>
+<pre><code class="language-sh">go run worker/worker.go
+</code></pre>
+<p>You should be able to see the message printed from each handler.</p>
+<h3 id="redis-nodes-and-queues"><a class="header" href="#redis-nodes-and-queues">Redis Nodes and Queues</a></h3>
+<p>As described in the overview section, Asynq shards data by queue. All tasks enqueued to the same queue belongs to the same Redis node.<br />
+But which Redis node hosts which queues?</p>
+<p>We can use CLI to answer that question.</p>
+<pre><code class="language-sh">asynq queue ls --cluster
+</code></pre>
+<p>This command will print a list of queues along with:</p>
+<ul>
+<li>cluster nodes the queue belongs to</li>
+<li>cluster hash slot the queue maps to</li>
+</ul>
+<p>The output may look something like this:</p>
+<pre><code class="language-sh">Queue          Cluster KeySlot  Cluster Nodes
+-----          ---------------  -------------
+images         9450             [{d54231bccd6c1765ea15caf95a41c67b10b91e58 127.0.0.1:7001} {70a7d4569eac28eed577ee91863703ffab98d2e0 127.0.0.1:7005}]
+webhooks       4418             [{d58959f6057ad0911d92d86d1d16dc2242e9ec48 127.0.0.1:7004} {e2fb9f1296a8d3a49818e0f9be3bfd74fdc052ea 127.0.0.1:7000}]
+notifications  16340            [{c738a8a98c5f5f9161e9563fa739f9c8191b7f1a 127.0.0.1:7002} {18cdaa0712191d74656f08017371df41eeaad5fa 127.0.0.1:7003}]
+</code></pre>
+<p>You can run <code>redis-cli --cluster reshard</code> command to move queue from one node to another. Note that operations may become unavailable for some time during resharding since Asynq uses multi-key operations.</p>
+<hr />
+<p>This was a quick walkthrough of how to use Redis Cluster with Asynq.
+If you have any questions or feature requests, please create an issue on Github.
+Thank you!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="Task-aggregation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="Automatic-Failover.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="Task-aggregation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="Automatic-Failover.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

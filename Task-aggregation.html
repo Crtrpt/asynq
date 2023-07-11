@@ -1,0 +1,364 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Task Aggregation</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Basics</li><li class="chapter-item expanded "><a href="Getting-Started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="Handler-Deep-Dive.html"><strong aria-hidden="true">2.</strong> Handler Deep Dive</a></li><li class="chapter-item expanded "><a href="Life-of-a-Task.html"><strong aria-hidden="true">3.</strong> Life of a Task</a></li><li class="chapter-item expanded "><a href="Signals.html"><strong aria-hidden="true">4.</strong> Signals</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced Topics</li><li class="chapter-item expanded "><a href="Queue-Priority.html"><strong aria-hidden="true">5.</strong> Queue Priority</a></li><li class="chapter-item expanded "><a href="Task-Retry.html"><strong aria-hidden="true">6.</strong> Task Retry</a></li><li class="chapter-item expanded "><a href="Task-Timeout-and-Cancelation.html"><strong aria-hidden="true">7.</strong> Timeout, Cancelation</a></li><li class="chapter-item expanded "><a href="Periodic-Tasks.html"><strong aria-hidden="true">8.</strong> Periodic Task</a></li><li class="chapter-item expanded "><a href="Dynamic-Periodic-Task.html"><strong aria-hidden="true">9.</strong> Periodic Task (Dynamic)</a></li><li class="chapter-item expanded "><a href="Rate-Limiting.html"><strong aria-hidden="true">10.</strong> Rate Limiting</a></li><li class="chapter-item expanded "><a href="Unique-Tasks.html"><strong aria-hidden="true">11.</strong> Unique Task</a></li><li class="chapter-item expanded "><a href="Task-Retention-and-Result.html"><strong aria-hidden="true">12.</strong> Task Retention and Result</a></li><li class="chapter-item expanded "><a href="Task-aggregation.html" class="active"><strong aria-hidden="true">13.</strong> Task Aggregation</a></li><li class="chapter-item expanded "><a href="Redis-Cluster.html"><strong aria-hidden="true">14.</strong> Redis Cluster</a></li><li class="chapter-item expanded "><a href="Automatic-Failover.html"><strong aria-hidden="true">15.</strong> Automatic Failover</a></li><li class="chapter-item expanded "><a href="Monitoring-and-Alerting.html"><strong aria-hidden="true">16.</strong> Monitoring and Alerting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>This page describes Asynq's task aggregation feature.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>Task aggregation allows you to enqueue multiple tasks successively, and have them passed to the <code>Handler</code> together rather than individually.
+The feature allows you to batch multiple successive operations into one, in order to save on costs, optimize caching, or batch notifications, for example.</p>
+<h2 id="how-it-works"><a class="header" href="#how-it-works">How it works</a></h2>
+<p>In order to use the task aggregation feature, you need to enqueue the tasks in the same queue with the common <strong>group name</strong>.
+Tasks enqueued with the same <code>(queue, group)</code> pairs are aggregated into one task by <strong><code>GroupAggregator</code></strong> that you provide and the aggregated task will be passed to the handler.</p>
+<p>When creating an aggregated task, Asynq server will wait for more tasks until a configurable <strong>grace period</strong>. The grace period is renewed whenever you enqueue a new task with the same <code>(queue, group)</code>.</p>
+<p>The grace period has configurable upper bound: you can set a <strong>maximum aggregation delay</strong>, after which Asynq server will aggregate the tasks regardless of the remaining grace period.</p>
+<p>You can also set a <strong>maximum number of tasks</strong> that can be aggregated together. If that number is reached, Asynq server will aggregate the tasks immediately.</p>
+<p><strong>Note</strong>: Scheduling and aggregation of tasks are conflicting features and scheduling takes silent priority over aggregation.</p>
+<h2 id="quick-example"><a class="header" href="#quick-example">Quick Example</a></h2>
+<p>On the client side, use <code>Queue</code> and <code>Group</code> option to enqueue the task in the same group.</p>
+<pre><code class="language-go">// Enqueue three tasks to the same group.
+client.Enqueue(task1, asynq.Queue(&quot;notifications&quot;), asynq.Group(&quot;user1:email&quot;))
+client.Enqueue(task2, asynq.Queue(&quot;notifications&quot;), asynq.Group(&quot;user1:email&quot;))
+client.Enqueue(task3, asynq.Queue(&quot;notifications&quot;), asynq.Group(&quot;user1:email&quot;))
+</code></pre>
+<p>On the server side, provide <code>GroupAggregator</code> to enable task aggregation feature.
+You can optionally configure <code>GroupGracePeriod</code>, <code>GroupMaxDelay</code>, and <code>GroupMaxSize</code> to customize the aggregation policy.</p>
+<pre><code class="language-go">// This function is used to aggregate multiple tasks into one.
+func aggregate(group string, tasks []*asynq.Task) *asynq.Task {
+    // ... Your logic to aggregate the given tasks and return the aggregated task.
+    // ... Use NewTask(typename, payload, opts...) to create a new task and set options if needed.
+    // ... (Note) Queue option will be ignored and the aggregated task will always be enqueued to the same queue the group belonged.
+}
+
+srv := asynq.NewServer(
+           redisConnOpt,
+           asynq.Config{
+               GroupAggregator:  asynq.GroupAggregatorFunc(aggregate),
+               GroupMaxDelay:    10 * time.Minute,
+               GroupGracePeriod: 2 * time.Minute,
+               GroupMaxSize:     20,
+               Queues: map[string]int{&quot;notifications&quot;: 1},
+           },
+       )
+</code></pre>
+<h2 id="tutorial"><a class="header" href="#tutorial">Tutorial</a></h2>
+<p>In this section, we provide a simple programs to see the aggregation feature in action.</p>
+<p>First, create a client program with the following:</p>
+<pre><code class="language-go">// client.go
+package main
+
+import (
+        &quot;flag&quot;
+        &quot;log&quot;
+
+        &quot;github.com/hibiken/asynq&quot;
+)
+
+var (
+       flagRedisAddr = flag.String(&quot;redis-addr&quot;, &quot;localhost:6379&quot;, &quot;Redis server address&quot;)
+       flagMessage = flag.String(&quot;message&quot;, &quot;hello&quot;, &quot;Message to print when task gets processed&quot;)
+)
+
+func main() {
+        flag.Parse()
+
+        c := asynq.NewClient(asynq.RedisClientOpt{Addr: *flagRedisAddr})
+        defer c.Close()
+
+        task := asynq.NewTask(&quot;aggregation-tutorial&quot;, []byte(*flagMessage))
+        info, err := c.Enqueue(task, asynq.Queue(&quot;tutorial&quot;), asynq.Group(&quot;example-group&quot;))
+        if err != nil {
+                log.Fatalf(&quot;Failed to enqueue task: %v&quot;, err)
+        }
+        log.Printf(&quot;Successfully enqueued task: %s&quot;, info.ID)
+}
+</code></pre>
+<p>You can run this program a few times:</p>
+<pre><code class="language-sh">$ go build -o client client.go 
+$ ./client --redis-addr=&lt;REDIS_SERVER_ADDR&gt;
+$ ./client --message=hi --redis-addr=&lt;REDIS_SERVER_ADDR&gt;
+$ ./client --message=bye --redis-addr=&lt;REDIS_SERVER_ADDR&gt;
+</code></pre>
+<p>Now if you inspect the queue via CLI or Web UI, you can see that you have <strong>aggregating</strong> tasks in the queue.</p>
+<p>Next, create a server program with the following:</p>
+<pre><code class="language-go">// server.go
+package main
+
+import (
+        &quot;context&quot;
+        &quot;flag&quot;
+        &quot;log&quot;
+        &quot;strings&quot;
+        &quot;time&quot;
+
+        &quot;github.com/hibiken/asynq&quot;
+)
+
+var (
+        flagRedisAddr = flag.String(&quot;redis-addr&quot;, &quot;localhost:6379&quot;, &quot;Redis server address&quot;)
+        flagGroupGracePeriod = flag.Duration(&quot;grace-period&quot;, 10*time.Second, &quot;Group grace period&quot;)
+        flagGroupMaxDelay = flag.Duration(&quot;max-delay&quot;, 30*time.Second, &quot;Group max delay&quot;)
+        flagGroupMaxSize = flag.Int(&quot;max-size&quot;, 20, &quot;Group max size&quot;)
+)
+
+// Simple aggregation function.
+// Combines all tasks messages, each message on a separate line.
+func aggregate(group string, tasks []*asynq.Task) *asynq.Task {
+        log.Printf(&quot;Aggregating %d tasks from group %q&quot;, len(tasks), group)
+        var b strings.Builder
+        for _, t := range tasks {
+                b.Write(t.Payload())
+                b.WriteString(&quot;\n&quot;)
+        }
+        return asynq.NewTask(&quot;aggregated-task&quot;, []byte(b.String()))
+}
+
+func handleAggregatedTask(ctx context.Context, task *asynq.Task) error {
+        log.Print(&quot;Handler received aggregated task&quot;)
+        log.Printf(&quot;aggregated messags: %s&quot;, task.Payload())
+        return nil
+}
+
+func main() {
+        flag.Parse()
+
+        srv := asynq.NewServer(
+                asynq.RedisClientOpt{Addr: *flagRedisAddr},
+                asynq.Config{
+                        Queues:           map[string]int{&quot;tutorial&quot;: 1},
+                        GroupAggregator:  asynq.GroupAggregatorFunc(aggregate),
+                        GroupGracePeriod: *flagGroupGracePeriod,
+                        GroupMaxDelay:    *flagGroupMaxDelay,
+                        GroupMaxSize:     *flagGroupMaxSize,
+                },
+        )
+
+        mux := asynq.NewServeMux()
+        mux.HandleFunc(&quot;aggregated-task&quot;, handleAggregatedTask)
+
+        if err := srv.Run(mux); err != nil {
+                log.Fatalf(&quot;Failed to start the server: %v&quot;, err)
+        }
+}
+</code></pre>
+<p>You can run this program and observe the output:</p>
+<pre><code class="language-sh">$ go build -o server server.go
+$ ./server --redis-addr=&lt;REDIS_SERVER_ADDR&gt;
+</code></pre>
+<p>You should be able to see in the output that the server has aggregated the tasks in the group and handler processed the aggregated task.
+Feel free to play around with <code>--grace-period</code>, <code>--max-delay</code> and <code>--max-size</code> flags in the above program to see how it affects the aggregation policy.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="Task-Retention-and-Result.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="Redis-Cluster.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="Task-Retention-and-Result.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="Redis-Cluster.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

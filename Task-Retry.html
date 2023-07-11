@@ -1,0 +1,302 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Task Retry</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Basics</li><li class="chapter-item expanded "><a href="Getting-Started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="Handler-Deep-Dive.html"><strong aria-hidden="true">2.</strong> Handler Deep Dive</a></li><li class="chapter-item expanded "><a href="Life-of-a-Task.html"><strong aria-hidden="true">3.</strong> Life of a Task</a></li><li class="chapter-item expanded "><a href="Signals.html"><strong aria-hidden="true">4.</strong> Signals</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced Topics</li><li class="chapter-item expanded "><a href="Queue-Priority.html"><strong aria-hidden="true">5.</strong> Queue Priority</a></li><li class="chapter-item expanded "><a href="Task-Retry.html" class="active"><strong aria-hidden="true">6.</strong> Task Retry</a></li><li class="chapter-item expanded "><a href="Task-Timeout-and-Cancelation.html"><strong aria-hidden="true">7.</strong> Timeout, Cancelation</a></li><li class="chapter-item expanded "><a href="Periodic-Tasks.html"><strong aria-hidden="true">8.</strong> Periodic Task</a></li><li class="chapter-item expanded "><a href="Dynamic-Periodic-Task.html"><strong aria-hidden="true">9.</strong> Periodic Task (Dynamic)</a></li><li class="chapter-item expanded "><a href="Rate-Limiting.html"><strong aria-hidden="true">10.</strong> Rate Limiting</a></li><li class="chapter-item expanded "><a href="Unique-Tasks.html"><strong aria-hidden="true">11.</strong> Unique Task</a></li><li class="chapter-item expanded "><a href="Task-Retention-and-Result.html"><strong aria-hidden="true">12.</strong> Task Retention and Result</a></li><li class="chapter-item expanded "><a href="Task-aggregation.html"><strong aria-hidden="true">13.</strong> Task Aggregation</a></li><li class="chapter-item expanded "><a href="Redis-Cluster.html"><strong aria-hidden="true">14.</strong> Redis Cluster</a></li><li class="chapter-item expanded "><a href="Automatic-Failover.html"><strong aria-hidden="true">15.</strong> Automatic Failover</a></li><li class="chapter-item expanded "><a href="Monitoring-and-Alerting.html"><strong aria-hidden="true">16.</strong> Monitoring and Alerting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>This page explains how to configure task retries.</p>
+<h2 id="default-behavior"><a class="header" href="#default-behavior">Default behavior</a></h2>
+<p>By default, <code>asynq</code> will retry a task up to 25 times. Every time a task is retried it uses an exponential backoff strategy to calculate the retry delay. 
+If a task exhausts all of its retry count (default: 25), the task will moved to the <strong>archive</strong> for debugging and inspection purposes and won't be automatically retried (You can still manually run task using CLI or WebUI).</p>
+<p>The following properties of task-retry can be customized:</p>
+<ul>
+<li>Max retry count per task</li>
+<li>Time duration to wait (i.e. delay) before a failed task can be retried again</li>
+<li>Whether to consume the retry count for the task</li>
+<li>Whether to skip retry and send the task directly to the archive</li>
+</ul>
+<p>The rest of the page describes each of these customizations.</p>
+<h2 id="customize-task-max-retry"><a class="header" href="#customize-task-max-retry">Customize Task Max Retry</a></h2>
+<p>You can specify the maximum number of times a task can be retried using <code>asynq.MaxRetry</code> option when enqueueing a task.</p>
+<p>Example:</p>
+<pre><code class="language-go">client.Enqueue(task, asynq.MaxRetry(5))
+</code></pre>
+<p>This specifies that the <code>task</code> should be retried up to five times.</p>
+<p>Alternatively, if you want to specify the maximum retry count for some task, you can set it as a default option for the task.</p>
+<pre><code class="language-go">task := asynq.NewTask(&quot;feed:import&quot;, nil, asynq.MaxRetry(5))
+client.Enqueue(task) // MaxRetry is set to 5
+</code></pre>
+<h2 id="customize-retry-delay"><a class="header" href="#customize-retry-delay">Customize Retry Delay</a></h2>
+<p>You can specify how to calculate retry delay using <code>RetryDelayFunc</code> option in <code>Config</code>.</p>
+<p>Signature of <code>RetryDelayFunc</code>:</p>
+<pre><code class="language-go">// n is the number of times the task has been retried
+// e is the error returned by the task handler
+// t is the task in question
+RetryDelayFunc func(n int, e error, t *asynq.Task) time.Duration
+</code></pre>
+<p>Example:</p>
+<pre><code class="language-go">srv := asynq.NewServer(redis, asynq.Config{
+    Concurrency: 20,
+    RetryDelayFunc: func(n int, e error, t *asynq.Task) time.Duration {
+        return 2 * time.Second
+    },
+})
+</code></pre>
+<p>This specifies that all failed task will wait two seconds before being processed again.</p>
+<p>The default behavior is exponential backoff, and is defined by <code>DefaultRetryDelayFunc</code>.
+The example below shows how to customize retry delay for a specific task type:</p>
+<pre><code class="language-go">srv := asynq.NewServer(redis, asynq.Config{
+    // Always use 2s delay for &quot;foo&quot; task, other tasks use the default behavior.
+    RetryDelayFunc: func(n int, e error, t *asynq.Task) time.Duration {
+        if t.Type() == &quot;foo&quot; {
+            return 2 * time.Second 
+        }
+        return asynq.DefaultRetryDelayFunc(n, e, t) 
+    },
+})
+</code></pre>
+<h2 id="non-failure-error"><a class="header" href="#non-failure-error">Non-Failure error</a></h2>
+<p>Sometimes you may want to return an error from the <code>Handler</code> and retry the task later, but don't want to consume the retry count. For example, you may want to retry later since the worker doesn't have enough resource to process the task.<br />
+You can optionally provide <code>IsFailure(error) bool</code> function to <code>Config</code> when you initialize a server. This predicate function determines whether the error returned from the Handler counts as a failure. If the function returns false (i.e. non-failure error), server won't consume the retry-count of the task and simply schedule the task to be retried later.</p>
+<p>Example:</p>
+<pre><code class="language-go">var ErrResourceNotAvailable = error.New(&quot;no resource is available&quot;)
+
+func HandleResourceIntensiveTask(ctx context.Context, task *asynq.Task) error {
+    if !IsResourceAvailable() {
+        return ErrResourceNotAvailalbe
+    }
+    // ... logic of handling resource intensive task
+}
+
+// ...
+
+srv := asynq.NewServer(redisConnOpt, asynq.Config{
+    // ... other config options
+    IsFailure: func(err error) bool {
+        return err != ErrResourceNotAvailable // If resource is not available, it's a non-failure error
+    },
+})
+</code></pre>
+<h2 id="skip-retry"><a class="header" href="#skip-retry">Skip Retry</a></h2>
+<p>If <code>Handler.ProcessTask</code> returns a <code>SkipRetry</code> error, the task will be archived regardless of the number of remaining retry count.
+The returned error can be <code>SkipRetry</code> or an error which wraps the <code>SkipRetry</code> error.</p>
+<pre><code class="language-go">func ExampleHandler(ctx context.Context, task *asynq.Task) error {
+    // Task handling logic here...
+    // If the handler knows that the task does not need a retry, then return SkipRetry
+    return fmt.Errorf(&quot;&lt;reason for skipping retry&gt;: %w&quot;, asynq.SkipRetry)
+}
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="Queue-Priority.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="Task-Timeout-and-Cancelation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="Queue-Priority.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="Task-Timeout-and-Cancelation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

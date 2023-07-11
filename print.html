@@ -1,0 +1,1671 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title></title>
+        <meta name="robots" content="noindex" />
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Basics</li><li class="chapter-item expanded "><a href="Getting-Started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="Handler-Deep-Dive.html"><strong aria-hidden="true">2.</strong> Handler Deep Dive</a></li><li class="chapter-item expanded "><a href="Life-of-a-Task.html"><strong aria-hidden="true">3.</strong> Life of a Task</a></li><li class="chapter-item expanded "><a href="Signals.html"><strong aria-hidden="true">4.</strong> Signals</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced Topics</li><li class="chapter-item expanded "><a href="Queue-Priority.html"><strong aria-hidden="true">5.</strong> Queue Priority</a></li><li class="chapter-item expanded "><a href="Task-Retry.html"><strong aria-hidden="true">6.</strong> Task Retry</a></li><li class="chapter-item expanded "><a href="Task-Timeout-and-Cancelation.html"><strong aria-hidden="true">7.</strong> Timeout, Cancelation</a></li><li class="chapter-item expanded "><a href="Periodic-Tasks.html"><strong aria-hidden="true">8.</strong> Periodic Task</a></li><li class="chapter-item expanded "><a href="Dynamic-Periodic-Task.html"><strong aria-hidden="true">9.</strong> Periodic Task (Dynamic)</a></li><li class="chapter-item expanded "><a href="Rate-Limiting.html"><strong aria-hidden="true">10.</strong> Rate Limiting</a></li><li class="chapter-item expanded "><a href="Unique-Tasks.html"><strong aria-hidden="true">11.</strong> Unique Task</a></li><li class="chapter-item expanded "><a href="Task-Retention-and-Result.html"><strong aria-hidden="true">12.</strong> Task Retention and Result</a></li><li class="chapter-item expanded "><a href="Task-aggregation.html"><strong aria-hidden="true">13.</strong> Task Aggregation</a></li><li class="chapter-item expanded "><a href="Redis-Cluster.html"><strong aria-hidden="true">14.</strong> Redis Cluster</a></li><li class="chapter-item expanded "><a href="Automatic-Failover.html"><strong aria-hidden="true">15.</strong> Automatic Failover</a></li><li class="chapter-item expanded "><a href="Monitoring-and-Alerting.html"><strong aria-hidden="true">16.</strong> Monitoring and Alerting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h3 id="welcome-to-a-tour-of-asynq"><a class="header" href="#welcome-to-a-tour-of-asynq">Welcome to a Tour of Asynq!</a></h3>
+<p><img src="https://github.com/hibiken/asynq/raw/master/docs/assets/overview.png" alt="Task Queue Diagram" /></p>
+<p>In this tutorial, we are going to write two programs, <code>client</code> and <code>workers</code>.</p>
+<ul>
+<li><code>client.go</code> will create and schedule tasks to be processed asynchronously by the background workers.</li>
+<li><code>workers.go</code> will start multiple concurrent workers to process the tasks created by the client.</li>
+</ul>
+<p><strong>This guide assumes that you are running a Redis server at <code>localhost:6379</code></strong>.
+Before we start, make sure you have Redis installed and running.</p>
+<p>Let's start by creating our two main files.</p>
+<pre><code class="language-sh">mkdir quickstart &amp;&amp; cd quickstart
+go mod init asynq-quickstart
+mkdir client workers
+touch client/client.go workers/workers.go
+</code></pre>
+<p>And install <code>asynq</code> package.</p>
+<pre><code class="language-sh">go get -u github.com/hibiken/asynq
+</code></pre>
+<p>Before we start writing code, let's review a few core types that we'll use in both of our programs.</p>
+<h3 id="redis-connection-option"><a class="header" href="#redis-connection-option">Redis Connection Option</a></h3>
+<p>Asynq uses Redis as a message broker.<br />
+Both <code>client.go</code> and <code>workers.go</code> need to connect to Redis to write to and read from it. 
+We are going to use <code>RedisClientOpt</code> to specify the connection to a Redis server running locally.</p>
+<pre><code class="language-go">redisConnOpt := asynq.RedisClientOpt{
+    Addr: &quot;localhost:6379&quot;,
+    // Omit if no password is required
+    Password: &quot;mypassword&quot;,
+    // Use a dedicated db number for asynq.
+    // By default, Redis offers 16 databases (0..15)
+    DB: 0,
+}
+</code></pre>
+<h3 id="tasks"><a class="header" href="#tasks">Tasks</a></h3>
+<p>In <code>asynq</code>, a unit of work is encapsulated in a type called <code>Task</code>,
+which conceptually has two fields: <code>Type</code> and <code>Payload</code>.</p>
+<pre><code class="language-go">// Type is a string value that indicates the type of the task. 
+func (t *Task) Type() string
+
+// Payload is the data needed for task execution.
+func (t *Task) Payload() []byte
+</code></pre>
+<p>Now that we've taken a look at the core types, let's start writing our programs.</p>
+<h3 id="client-program"><a class="header" href="#client-program">Client Program</a></h3>
+<p>In <code>client.go</code>, we are going to create a few tasks and enqueue them using <code>asynq.Client</code>. </p>
+<p>To create a task, use <code>NewTask</code> function and pass type and payload for the task.</p>
+<p>The <a href="https://godoc.org/github.com/hibiken/asynq#Client.Enqueue"><code>Enqueue</code></a> method takes a task and any number of options.<br />
+Use <a href="https://godoc.org/github.com/hibiken/asynq#ProcessIn"><code>ProcessIn</code></a> or <a href="https://godoc.org/github.com/hibiken/asynq#ProcessAt"><code>ProcessAt</code></a> option to schedule tasks to be processed in the future.</p>
+<pre><code class="language-go">// Task payload for any email related tasks.
+type EmailTaskPayload struct {
+    // ID for the email recipient.
+    UserID int
+}
+
+// client.go
+func main() {
+    client := asynq.NewClient(asynq.RedisClientOpt{Addr: &quot;localhost:6379&quot;})
+
+    // Create a task with typename and payload.
+    payload, err := json.Marshal(EmailTaskPayload{UserID: 42})
+    if err != nil {
+        log.Fatal(err)
+    }
+    t1 := asynq.NewTask(&quot;email:welcome&quot;, payload)
+
+    t2 := asynq.NewTask(&quot;email:reminder&quot;, payload)
+
+    // Process the task immediately.
+    info, err := client.Enqueue(t1)
+    if err != nil {
+        log.Fatal(err)
+    }
+    log.Printf(&quot; [*] Successfully enqueued task: %+v&quot;, info)
+
+    // Process the task 24 hours later.
+    info, err = client.Enqueue(t2, asynq.ProcessIn(24*time.Hour))
+    if err != nil {
+        log.Fatal(err)
+    }
+    log.Printf(&quot; [*] Successfully enqueued task: %+v&quot;, info)
+}
+</code></pre>
+<p>That's all we need for the client program. </p>
+<h3 id="workers-program"><a class="header" href="#workers-program">Workers Program</a></h3>
+<p>In <code>workers.go</code>, we'll create a <code>asynq.Server</code> instance to start the workers.</p>
+<p><code>NewServer</code> function takes <code>RedisConnOpt</code> and <code>Config</code>.</p>
+<p><code>Config</code> is used to tune the server's task processing behavior.<br />
+You can take a look at the documentation on <a href="https://pkg.go.dev/github.com/hibiken/asynq#Config"><code>Config</code></a> to see all the available config options.</p>
+<p>To keep it simple, we are only going to specify the concurrency in this example.</p>
+<pre><code class="language-go">// workers.go
+func main() {
+    srv := asynq.NewServer(
+        asynq.RedisClientOpt{Addr: &quot;localhost:6379&quot;},
+        asynq.Config{Concurrency: 10},
+    )
+
+    // NOTE: We'll cover what this `handler` is in the section below.
+    if err := srv.Run(handler); err != nil {
+        log.Fatal(err)
+    }
+}
+</code></pre>
+<p>The argument to <code>(*Server).Run</code> is an interface <code>asynq.Handler</code> which has one method <code>ProcessTask</code>.</p>
+<pre><code class="language-go">type Handler interface {
+    // ProcessTask should return nil if the task was processed successfully.
+    // If ProcessTask returns a non-nil error or panics, the task will be retried again later.
+    ProcessTask(context.Context, *Task) error
+}
+</code></pre>
+<p>The simplest way to implement a handler is to define a function with the same signature and use <code>asynq.HandlerFunc</code> adapter type when passing it to <code>Run</code>.</p>
+<pre><code class="language-go">func handler(ctx context.Context, t *asynq.Task) error {
+    switch t.Type() {
+    case &quot;email:welcome&quot;:
+        var p EmailTaskPayload
+        if err := json.Unmarshal(t.Payload(), &amp;p); err != nil {
+            return err
+        }
+        log.Printf(&quot; [*] Send Welcome Email to User %d&quot;, p.UserID)
+
+    case &quot;email:reminder&quot;:
+        var p EmailTaskPayload
+        if err := json.Unmarshal(t.Payload(), &amp;p); err != nil {
+            return err
+        }
+        log.Printf(&quot; [*] Send Reminder Email to User %d&quot;, p.UserID)
+
+    default:
+        return fmt.Errorf(&quot;unexpected task type: %s&quot;, t.Type())
+    }
+    return nil
+}
+
+func main() {
+    srv := asynq.NewServer(
+        asynq.RedisClientOpt{Addr: &quot;localhost:6379&quot;},
+        asynq.Config{Concurrency: 10},
+    )
+
+    // Use asynq.HandlerFunc adapter for a handler function
+    if err := srv.Run(asynq.HandlerFunc(handler)); err != nil {
+        log.Fatal(err)
+    }
+}
+</code></pre>
+<p>We could keep adding switch cases to this handler function, but in a realistic application, it's convenient to define the logic for each case in a separate function.</p>
+<p>To refactor our code, let's use <code>ServeMux</code> to create our handler.
+Just like the <code>ServeMux</code> from <code>&quot;net/http&quot;</code> package, you register a handler by calling <code>Handle</code> or <code>HandleFunc</code>. <code>ServeMux</code> satisfies the <code>Handler</code> interface, so that you can pass it to <code>(*Server).Run</code>. </p>
+<pre><code class="language-go">// workers.go
+func main() {
+    srv := asynq.NewServer(
+        asynq.RedisClientOpt{Addr: &quot;localhost:6379&quot;},
+        asynq.Config{Concurrency: 10},
+    )
+
+    mux := asynq.NewServeMux()
+    mux.HandleFunc(&quot;email:welcome&quot;, sendWelcomeEmail)
+    mux.HandleFunc(&quot;email:reminder&quot;, sendReminderEmail)
+
+    if err := srv.Run(mux); err != nil {
+        log.Fatal(err)
+    }
+}
+
+func sendWelcomeEmail(ctx context.Context, t *asynq.Task) error {
+    var p EmailTaskPayload
+    if err := json.Unmarshal(t.Payload(), &amp;p); err != nil {
+        return err
+    }
+    log.Printf(&quot; [*] Send Welcome Email to User %d&quot;, p.UserID)
+    return nil
+}
+
+func sendReminderEmail(ctx context.Context, t *asynq.Task) error {
+    var p EmailTaskPayload
+    if err := json.Unmarshal(t.Payload(), &amp;p); err != nil {
+        return err
+    }
+    log.Printf(&quot; [*] Send Reminder Email to User %d&quot;, p.UserID)
+    return nil
+}
+</code></pre>
+<p>Now that we've extracted functions to handle each task type, the code looks a bit more organized.<br />
+However, the code is a bit too implicit, we have these string values for task types and payload types that should be encapsulated in a cohesive package. Let's refactor our code by writing a package that encapsulates task creations and handling. We'll simply create a package called <code>task</code>.</p>
+<pre><code class="language-sh">mkdir task &amp;&amp; touch task/task.go
+</code></pre>
+<pre><code class="language-go">package task
+
+import (
+    &quot;context&quot;
+    &quot;fmt&quot;
+   
+    &quot;github.com/hibiken/asynq&quot;
+)
+
+// A list of task types.
+const (
+    TypeWelcomeEmail  = &quot;email:welcome&quot;
+    TypeReminderEmail = &quot;email:reminder&quot;
+)
+
+// Task payload for any email related tasks.
+type emailTaskPayload struct {
+    // ID for the email recipient.
+    UserID int
+}
+
+func NewWelcomeEmailTask(id int) (*asynq.Task, error) {
+    payload, err := json.Marshal(emailTaskPayload{UserID: id})
+    if err != nil {
+        return nil, err
+    }
+    return asynq.NewTask(TypeWelcomeEmail, payload), nil
+}
+
+func NewReminderEmailTask(id int) (*asynq.Task, error) {
+    payload, err := json.Marshal(emailTaskPayload{UserID: id})
+    if err != nil {
+        return nil, err
+    }
+    return asynq.NewTask(TypeReminderEmail, payload), nil
+}
+
+func HandleWelcomeEmailTask(ctx context.Context, t *asynq.Task) error {
+    var p emailTaskPayload  
+    if err := json.Unmarshal(t.Payload(), &amp;p); err != nil {
+        return err
+    }
+    log.Printf(&quot; [*] Send Welcome Email to User %d&quot;, p.UserID)
+    return nil
+}
+
+func HandleReminderEmailTask(ctx context.Context, t *asynq.Task) error {
+    var p emailTaskPayload  
+    if err := json.Unmarshal(t.Payload(), &amp;p); err != nil {
+        return err
+    }
+    log.Printf(&quot; [*] Send Reminder Email to User %d&quot;, p.UserID)
+    return nil
+}
+</code></pre>
+<p>And now we can import this package in both <code>client.go</code> and <code>workers.go</code>.</p>
+<pre><code class="language-go">// client.go
+func main() {
+    client := asynq.NewClient(asynq.RedisClientOpt{Addr: &quot;localhost:6379&quot;})
+
+    t1, err := task.NewWelcomeEmailTask(42)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    t2, err := task.NewReminderEmailTask(42)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Process the task immediately.
+    info, err := client.Enqueue(t1)
+    if err != nil {
+        log.Fatal(err)
+    }
+    log.Printf(&quot; [*] Successfully enqueued task: %+v&quot;, info)
+
+    // Process the task 24 hours later.
+    info, err = client.Enqueue(t2, asynq.ProcessIn(24*time.Hour))
+    if err != nil {
+        log.Fatal(err)
+    }
+    log.Printf(&quot; [*] Successfully enqueued task: %+v&quot;, info)
+}
+</code></pre>
+<pre><code class="language-go">// workers.go
+func main() {
+    srv := asynq.NewServer(
+        asynq.RedisClientOpt{Addr: &quot;localhost:6379&quot;},
+        asynq.Config{Concurrency: 10},
+    )
+
+    mux := asynq.NewServeMux()
+    mux.HandleFunc(task.TypeWelcomeEmail, task.HandleWelcomeEmailTask)
+    mux.HandleFunc(task.TypeReminderEmail, task.HandleReminderEmailTask)
+
+    if err := srv.Run(mux); err != nil {
+        log.Fatal(err)
+    }
+}
+</code></pre>
+<p>And now the code looks much nicer!</p>
+<h3 id="running-the-programs"><a class="header" href="#running-the-programs">Running the Programs</a></h3>
+<p>Now that we have both <code>client</code> and <code>workers</code>, we can run both programs.
+Let's run the <code>client</code> program to create and schedule tasks.</p>
+<pre><code class="language-sh">go run client/client.go
+</code></pre>
+<p>This will create two tasks: One that should be processed immediately and another to be processed 24 hours later.</p>
+<p>Let's use <code>asynq</code> CLI to inspect the tasks.</p>
+<pre><code class="language-sh">asynq dash
+</code></pre>
+<p>You should be able to see that there's one task in <strong>Enqueued</strong> state and another in <strong>Scheduled</strong> state.</p>
+<p><strong>Note</strong>: To learn more about the meaning of each state, check out <a href="https://github.com/hibiken/asynq/wiki/Life-of-a-Task">Life of a Task</a>.</p>
+<p>And finally, let's start the <code>workers</code> program to process tasks.</p>
+<pre><code class="language-sh">go run workers/workers.go
+</code></pre>
+<p><strong>Note</strong>: This will not exit until you send a signal to terminate the program. See <a href="https://github.com/hibiken/asynq/wiki/Signals">Signal Wiki page</a> for best practice on how to safely terminate background workers.</p>
+<p>You should be able to see some text printed in your terminal indicating that the task was processed successfully.</p>
+<p>You can run the <code>client</code> program again to see how workers pick up the tasks and process them.</p>
+<h3 id="task-retry"><a class="header" href="#task-retry">Task Retry</a></h3>
+<p>It's not uncommon that a task doesn't get processed successfully in the first attempt. By default, a failed task will be retried with exponential backoff up to 25 times. 
+Let's update our handler to return an error to simulate an unsuccessful scenario.</p>
+<pre><code class="language-go">// tasks.go
+func HandleWelcomeEmailTask(ctx context.Context, t *asynq.Task) error {
+    var p emailTaskPayload
+    if err := json.Unmarshal(t.Payload(), &amp;p); err != nil {
+        return err
+    }
+    log.Printf(&quot; [*] Attempting to Send Welcome Email to User %d...&quot;, p.UserID)
+    return fmt.Errorf(&quot;could not send email to the user&quot;) // &lt;-- Return error 
+}
+</code></pre>
+<p>Let's restart our workers program and enqueue a task.</p>
+<pre><code class="language-sh">go run workers/workers.go
+
+go run client/client.go
+</code></pre>
+<p>If you are running <code>asynq dash</code>, you should be able to see that there's a task in the <strong>Retry</strong> state (by navigating to the queue details view and highlighting the &quot;retry&quot; tab).</p>
+<p>To inspect which tasks are in retry state, you can also run</p>
+<pre><code class="language-sh">asynq task ls --queue=default --state=retry
+</code></pre>
+<p>This will list all the task that will be retried in the future. The output includes ETA of the task's next execution. </p>
+<p>Once a task exhausts its retry count, the task will transition to the <strong>Archived</strong> state and won't be retried (You can still manually run archived tasks using CLI or WebUI tool). </p>
+<p>Let's fix our handler before we wrap up this tutorial.</p>
+<pre><code class="language-go">func HandleWelcomeEmailTask(ctx context.Context, t *asynq.Task) error {
+    var p emailTaskPayload
+    if err := json.Unmarshal(t.Payload(), &amp;p); err != nil {
+        return err
+    }
+    log.Printf(&quot; [*] Send Welcome Email to User %d&quot;, p.UserID)
+    return nil 
+}
+</code></pre>
+<p>Now that we fixed the handler, task will be processed successfully in the next attempt :)</p>
+<p>This was a whirlwind tour of <code>asynq</code> basics. To learn more about all of its features such as <strong><a href="https://github.com/hibiken/asynq/wiki/Queue-Priority">priority queues</a></strong> and <strong><a href="https://github.com/hibiken/asynq/wiki/Task-Retry">custom retry</a></strong>, see our <a href="https://github.com/hibiken/asynq/wiki">Wiki page</a>.</p>
+<p>Thanks for reading!</p>
+<div style="break-before: page; page-break-before: always;"></div><p>In this page, I'll explain the design behind the <a href="https://pkg.go.dev/github.com/hibiken/asynq?tab=doc#Handler"><code>Handler</code></a> interface.</p>
+<h2 id="handler-interface"><a class="header" href="#handler-interface">Handler Interface</a></h2>
+<p>Core of your asynchronous task processing logic lives inside the <a href="https://pkg.go.dev/github.com/hibiken/asynq?tab=doc#Handler"><code>Handler</code></a> you provide to run a server.<br />
+Handler's responsibility is to take a task and process it, while taking the context into account.<br />
+It should report any errors to retry the task later, if the processing is unsuccessful.</p>
+<p>Here's the interface definition:</p>
+<pre><code class="language-go">type Handler interface {
+    ProcessTask(context.Context, *Task) error
+}
+</code></pre>
+<p>It's a simple interface which describes the Handler's responsibility succinctly.</p>
+<h2 id="implementing-interface"><a class="header" href="#implementing-interface">Implementing Interface</a></h2>
+<p>Implementing this handler interface can be done in many ways.</p>
+<p>Here's an example of defining your own struct type to process tasks. </p>
+<pre><code class="language-go">type MyTaskHandler struct {
+   // ... fields
+}
+
+func (h *MyTaskHandler) ProcessTask(ctx context.Context, t *asynq.Task) error {
+   // ... task processing logic
+}
+</code></pre>
+<p>You can even define a function to satisfy the interface, thanks to the <a href="https://pkg.go.dev/github.com/hibiken/asynq?tab=doc#HandlerFunc"><code>HandlerFunc</code></a> adapter type.</p>
+<pre><code class="language-go">func myHandler(ctx context.Context, t *asynq.Task) error {
+    // ... task processing logic
+}
+
+// h satisfies Handler
+h := asynq.HandlerFunc(myHandler) 
+</code></pre>
+<p>In most cases, you'd probably want to examine the <code>Type</code> of the input task and process it accordingly.</p>
+<pre><code class="language-go">func (h *MyTaskHandler) ProcessTask(ctx context.Context, t *asynq.Task) error {
+   switch t.Type() {
+   case &quot;type1&quot;:
+      // process type 1
+   case &quot;type2&quot;:
+      // process type2
+   case &quot;typeN&quot;:
+      // process typeN
+
+   default:
+      return fmt.Errorf(&quot;unexpected task type: %q&quot;, t.Type())
+   }
+}
+</code></pre>
+<p>You can see that a Handler can be composed of many different handlers, each case in the above example can be handled by a dedicated handler. This is where <a href="https://pkg.go.dev/github.com/hibiken/asynq?tab=doc#ServeMux"><code>ServeMux</code></a> type can be useful.</p>
+<h2 id="using-servemux"><a class="header" href="#using-servemux">Using ServeMux</a></h2>
+<p><em>NOTE: You don't have to use <code>ServeMux</code> type to implement a Handler, but it can be useful in many cases.</em><br />
+With <a href="https://pkg.go.dev/github.com/hibiken/asynq?tab=doc#ServeMux"><code>ServeMux</code></a>, you can register multiple Handlers. <strong>It matches the type of each task against a list of registered patterns and calls the handler for the pattern that most closely matches the task's type name.</strong></p>
+<pre><code class="language-go">mux := asynq.NewServeMux()
+mux.Handle(&quot;email:welcome&quot;, welcomeEmailHandler)
+mux.Handle(&quot;email:reminder&quot;, reminderEmailHandler)
+mux.Handle(&quot;email:&quot; defaultEmailHandler) // catchall for all other task types with a prefix &quot;email:&quot; 
+</code></pre>
+<h2 id="using-middleware"><a class="header" href="#using-middleware">Using Middleware</a></h2>
+<p>If you need to execute some code before and/or after handlers, you can accomplish that using middlewares.
+Middleware is a function that takes a <code>Handler</code> and returns a <code>Handler</code>.<br />
+Here's an example of a middleware that logs the start and end of task processing.</p>
+<pre><code class="language-go">func loggingMiddleware(h asynq.Handler) asynq.Handler {
+    return asynq.HandlerFunc(func(ctx context.Context, t *asynq.Task) error {
+        start := time.Now()
+        log.Printf(&quot;Start processing %q&quot;, t.Type())
+        err := h.ProcessTask(ctx, t)
+        if err != nil {
+            return err
+        }
+        log.Printf(&quot;Finished processing %q: Elapsed Time = %v&quot;, t.Type(), time.Since(start))
+        return nil
+    })
+}
+</code></pre>
+<p>And now you can <em>wrap</em> your Handler with this middleware.</p>
+<pre><code class="language-go">myHandler = loggingMiddleware(myHandler)
+</code></pre>
+<p>Alternatively, if you are using <code>ServeMux</code> you can provide middlewares like this.</p>
+<pre><code class="language-go">mux := NewServeMux()
+mux.Use(loggingMiddleware)
+</code></pre>
+<h3 id="grouping-middlewares"><a class="header" href="#grouping-middlewares">Grouping middlewares</a></h3>
+<p>If you have a situation where you want to apply a middleware to a group of tasks, you can accomplish it by composing multiple <code>ServeMux</code> instances. <em>One limitation is that the tasks in each group need to have the same prefix in their type name</em>.</p>
+<p><strong>Example:</strong><br />
+If you have some tasks process orders and some tasks process products, and you want to apply one shared logic for all &quot;product&quot; tasks and another shared logic for all &quot;order&quot; tasks, you can achieve it like this:</p>
+<pre><code class="language-go">productHandlers := asynq.NewServeMux()
+productHandlers.Use(productMiddleware) // shared logic for all product tasks
+productHandlers.HandleFunc(&quot;product:update&quot;, productUpdateTaskHandler)
+// ... register other &quot;product&quot; task handlers
+
+orderHandlers := asynq.NewServeMux()
+orderHandler.Use(orderMiddleware) // shared logic for all order tasks
+orderHandlers.HandleFunc(&quot;order:refund&quot;, orderRefundTaskHandler)
+// ... register other &quot;order&quot; task handlers.
+
+// Top level handler
+mux := asynq.NewServeMux()
+mux.Use(someGlobalMiddleware) // shared logic for all tasks
+mux.Handle(&quot;product:&quot;, productHandlers)
+mux.Handle(&quot;order:&quot;, orderHandlers)
+
+if err := srv.Run(mux); err != nil {
+    log.Fatal(err)
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><p>Asynq tasks go through a number of states in their lifetime. This page documents a life of a task, from the task's creation to its deletion.</p>
+<h2 id="task-lifecycle"><a class="header" href="#task-lifecycle">Task Lifecycle</a></h2>
+<p>When you enqueue a task, <code>asynq</code> manages the task internally to make sure that a handler gets invoked with the task at the specified time. In the process, the task can go through different lifecycle states.</p>
+<p>Here's the list of different lifecycle states:</p>
+<ul>
+<li><strong>Scheduled</strong> : task is waiting to be processed in the future (<em>Only applies to tasks with <code>ProcessAt</code> or <code>ProcessIn</code> option</em>).</li>
+<li><strong>Pending</strong> : task is ready to be processed and will be picked up by a free worker.</li>
+<li><strong>Active</strong> : task is being processed by a worker (i.e. handler is invoked with the task).</li>
+<li><strong>Retry</strong> : worker failed to process the task and the task is waiting to be retried in the future.</li>
+<li><strong>Archived</strong> : task reached its max retry and stored in an archive for manual inspection.</li>
+<li><strong>Completed</strong>: task was successfully processed and retained until retention TTL expires (<em>Only applies to tasks with <code>Retention</code> option</em>).</li>
+</ul>
+<p>Let's use an example to look at different lifecycle states.</p>
+<pre><code class="language-go">// Task 1 : Scheduled to be processed 24 hours later.
+client.Enqueue(task1, asynq.ProcessIn(24*time.Hour))
+
+// Task 2 : Enqueued to be processed immediately.
+client.Enqueue(task2)
+
+// Task 3: Enqueued with a Retention option.
+client.Enqueue(task3, asynq.Retention(2*time.Hour))
+</code></pre>
+<p>In this example, <code>task1</code> will stay in the <em>scheduled</em> state for the next 24 hours. After 24 hours, it will transition to the <em>pending</em> state and then to the <em>active</em> state. If the task was processed successfully then the task data is removed from Redis. If the task was <em>NOT</em> processed successfully (i.e. handler returned an error OR panicked), then the task will transition to the <em>retry</em> state to be retried later.
+<a href="https://github.com/hibiken/asynq/wiki/Task-Retry#customize-retry-delay">After some delay</a>, the task will transition to the <em>pending</em> state again and then to the <em>active</em>. This loop will continues until either the task gets processed successfully OR the task exhausts all of its retry count. In the latter case, the task will transition to the <em>archived</em> state.</p>
+<p>The only difference between <code>task2</code> and <code>task1</code> in the example is that <code>task2</code> will skip the <strong>scheduled</strong> state and goes directly to the <strong>pending</strong> state. </p>
+<p><code>task3</code> is enqueued with a <code>Retention</code> option of 2 hours. This means that after task3 gets processed successfully by a worker, the task will remain in the queue in the <strong>completed</strong> state for 2 hours before it gets deleted from the queue. By default, if a task doesn't have retention option set, the task will be deleted immediately after completion.</p>
+<p>The diagram below shows the state transitions. </p>
+<pre><code class="language-txt">+-------------+            +--------------+          +--------------+           +-------------+
+|             |            |              |          |              | Success   |             |
+|  Scheduled  |-----------&gt;|   Pending    |---------&gt;|    Active    |---------&gt; |  Completed  |
+|  (Optional) |            |              |          |              |           |  (Optional) |
++-------------+            +--------------+          +--------------+           +-------------+
+                                  ^                       |                            |
+                                  |                       |                            | Deletion
+                                  |                       | Failed                     |
+                                  |                       |                            V
+                                  |                       |
+                                  |                       |
+                           +------+-------+               |        +--------------+
+                           |              |               |        |              |
+                           |    Retry     |&lt;--------------+-------&gt;|   Archived   |
+                           |              |                        |              |
+                           +--------------+                        +--------------+
+
+
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><p>This page explains how to use signals to gracefully shut down worker server process.</p>
+<p>When you start the server processing with <code>Server.Run(Handler)</code>, it will block and wait for incoming signals.</p>
+<p>There are two types of signals you can send to a running program to gracefully shutdown the process.</p>
+<ul>
+<li><strong>TSTP</strong> : This signal tells <code>Server</code> to stop processing new tasks.</li>
+<li><strong>TERM</strong> or <strong>INT</strong> : This signal tells <code>Server</code> to terminate (i.e. shutdown).</li>
+</ul>
+<p>It's recommended that you <strong>first send TSTP signal</strong> to stop processing new tasks and wait for all in-progress tasks to finish <strong>before sending TERM signal</strong> to terminate the program.</p>
+<p>Use <code>kill</code> command to send signals.</p>
+<pre><code class="language-sh">kill -TSTP &lt;pid&gt; # stop processing new tasks
+
+kill -TERM &lt;pid&gt; # shutdown the server
+</code></pre>
+<p><strong>Note</strong>: If you send <strong>TERM</strong> or <strong>INT</strong> signal without sending <strong>TSTP</strong> signal, the <code>Server</code> will start a timer for 8 seconds to allow for all workers to finish (To customize this timeout duration, use <code>ShutdownTime</code> config). If there are workers that didn't finish within that time frame, the task will be transitioned back to <em>pending</em> state and will be processed once the program restarts.</p>
+<p><strong>Note</strong>: Currently, <strong>TSTP</strong> signal is not supported for windows.</p>
+<div style="break-before: page; page-break-before: always;"></div><p>This page explains how to configure <code>asynq</code> background processing to suite your needs.</p>
+<h2 id="weighted-priority"><a class="header" href="#weighted-priority">Weighted Priority</a></h2>
+<p>By default, <code>Server</code> will create a single queue named &quot;default&quot; to process all your tasks.</p>
+<p>If you need to assign a priority to each task, you can create multiple queues with different priority level.</p>
+<p>Example:</p>
+<pre><code class="language-go">srv := asynq.NewServer(redis, asynq.Config{
+    Concurrency: 10,
+    Queues: map[string]int{
+        &quot;critical&quot;: 6,
+        &quot;default&quot;:  3,
+        &quot;low&quot;:      1,
+    },
+})
+</code></pre>
+<p>This will create a <code>Background</code> instance with three queues: <strong>critical</strong>, <strong>default</strong>, and <strong>low</strong>. 
+The number associated with the queue name is the priority level for the queue.</p>
+<p>With this above configuration:</p>
+<ul>
+<li>tasks in <strong>critical</strong> queue will be processed <strong>60%</strong> of the time</li>
+<li>tasks in <strong>default</strong> queue will be processed <strong>30%</strong> of the time</li>
+<li>tasks in <strong>low</strong> queue will be processed <strong>10%</strong> of the time</li>
+</ul>
+<p>Now that we have multiple queues with different priority level, we can specify which queue to use when we schedule a task.</p>
+<p>Example:</p>
+<pre><code class="language-go">client := asynq.NewClient(redis)
+task := asynq.NewTask(&quot;send_notification&quot;, map[string]interface{}{&quot;user_id&quot;: 42})
+
+// Specify a task to use &quot;critical&quot; queue using `asynq.Queue` option.
+err := client.Enqueue(task, asynq.Queue(&quot;critical&quot;))
+
+// By default, task will be enqueued to &quot;default&quot; queue.
+err = client.Enqueue(task)
+</code></pre>
+<p>We can inspect queues with <code>asynq stats</code> command.</p>
+<p><img src="https://github.com/hibiken/asynq/blob/master/docs/assets/asynq_stats.gif?raw=true" alt="Output of asynq stats command" /></p>
+<p>You can see the number of tasks in each queue in the &quot;QUEUES&quot; section of the output.</p>
+<h2 id="strict-priority"><a class="header" href="#strict-priority">Strict Priority</a></h2>
+<p>If you need to create multiple queues and need to process all tasks in one queue over other queues, you can use <code>StrictPriority</code> option.</p>
+<p>Example:</p>
+<pre><code class="language-go">srv := asynq.NewServer(redis, asynq.Config{
+    Concurrency: 10,
+    Queues: map[string]int{
+        &quot;critical&quot;: 3,
+        &quot;default&quot;:  2,
+        &quot;low&quot;:      1,
+    },
+    StrictPriority: true, // strict mode!
+})
+</code></pre>
+<p>This will create a <code>Background</code> instance with three queues: <strong>critical</strong>, <strong>default</strong>, and <strong>low</strong> with strict priority. In strict priority mode, the queues with higher priority is always processed first, and queues with lower priority is processed only if all the other queues with higher priorities are empty.</p>
+<p>So in this example, tasks in <strong>critical</strong> queue is always processed first.
+If <strong>critical</strong> queue is empty, then <strong>default</strong> queue is processed.
+If both <strong>critical</strong> and <strong>default</strong> queue are empty, then <strong>low</strong> queue is processed.</p>
+<p>--
+From AllenRen</p>
+<div style="break-before: page; page-break-before: always;"></div><p>This page explains how to configure task retries.</p>
+<h2 id="default-behavior"><a class="header" href="#default-behavior">Default behavior</a></h2>
+<p>By default, <code>asynq</code> will retry a task up to 25 times. Every time a task is retried it uses an exponential backoff strategy to calculate the retry delay. 
+If a task exhausts all of its retry count (default: 25), the task will moved to the <strong>archive</strong> for debugging and inspection purposes and won't be automatically retried (You can still manually run task using CLI or WebUI).</p>
+<p>The following properties of task-retry can be customized:</p>
+<ul>
+<li>Max retry count per task</li>
+<li>Time duration to wait (i.e. delay) before a failed task can be retried again</li>
+<li>Whether to consume the retry count for the task</li>
+<li>Whether to skip retry and send the task directly to the archive</li>
+</ul>
+<p>The rest of the page describes each of these customizations.</p>
+<h2 id="customize-task-max-retry"><a class="header" href="#customize-task-max-retry">Customize Task Max Retry</a></h2>
+<p>You can specify the maximum number of times a task can be retried using <code>asynq.MaxRetry</code> option when enqueueing a task.</p>
+<p>Example:</p>
+<pre><code class="language-go">client.Enqueue(task, asynq.MaxRetry(5))
+</code></pre>
+<p>This specifies that the <code>task</code> should be retried up to five times.</p>
+<p>Alternatively, if you want to specify the maximum retry count for some task, you can set it as a default option for the task.</p>
+<pre><code class="language-go">task := asynq.NewTask(&quot;feed:import&quot;, nil, asynq.MaxRetry(5))
+client.Enqueue(task) // MaxRetry is set to 5
+</code></pre>
+<h2 id="customize-retry-delay"><a class="header" href="#customize-retry-delay">Customize Retry Delay</a></h2>
+<p>You can specify how to calculate retry delay using <code>RetryDelayFunc</code> option in <code>Config</code>.</p>
+<p>Signature of <code>RetryDelayFunc</code>:</p>
+<pre><code class="language-go">// n is the number of times the task has been retried
+// e is the error returned by the task handler
+// t is the task in question
+RetryDelayFunc func(n int, e error, t *asynq.Task) time.Duration
+</code></pre>
+<p>Example:</p>
+<pre><code class="language-go">srv := asynq.NewServer(redis, asynq.Config{
+    Concurrency: 20,
+    RetryDelayFunc: func(n int, e error, t *asynq.Task) time.Duration {
+        return 2 * time.Second
+    },
+})
+</code></pre>
+<p>This specifies that all failed task will wait two seconds before being processed again.</p>
+<p>The default behavior is exponential backoff, and is defined by <code>DefaultRetryDelayFunc</code>.
+The example below shows how to customize retry delay for a specific task type:</p>
+<pre><code class="language-go">srv := asynq.NewServer(redis, asynq.Config{
+    // Always use 2s delay for &quot;foo&quot; task, other tasks use the default behavior.
+    RetryDelayFunc: func(n int, e error, t *asynq.Task) time.Duration {
+        if t.Type() == &quot;foo&quot; {
+            return 2 * time.Second 
+        }
+        return asynq.DefaultRetryDelayFunc(n, e, t) 
+    },
+})
+</code></pre>
+<h2 id="non-failure-error"><a class="header" href="#non-failure-error">Non-Failure error</a></h2>
+<p>Sometimes you may want to return an error from the <code>Handler</code> and retry the task later, but don't want to consume the retry count. For example, you may want to retry later since the worker doesn't have enough resource to process the task.<br />
+You can optionally provide <code>IsFailure(error) bool</code> function to <code>Config</code> when you initialize a server. This predicate function determines whether the error returned from the Handler counts as a failure. If the function returns false (i.e. non-failure error), server won't consume the retry-count of the task and simply schedule the task to be retried later.</p>
+<p>Example:</p>
+<pre><code class="language-go">var ErrResourceNotAvailable = error.New(&quot;no resource is available&quot;)
+
+func HandleResourceIntensiveTask(ctx context.Context, task *asynq.Task) error {
+    if !IsResourceAvailable() {
+        return ErrResourceNotAvailalbe
+    }
+    // ... logic of handling resource intensive task
+}
+
+// ...
+
+srv := asynq.NewServer(redisConnOpt, asynq.Config{
+    // ... other config options
+    IsFailure: func(err error) bool {
+        return err != ErrResourceNotAvailable // If resource is not available, it's a non-failure error
+    },
+})
+</code></pre>
+<h2 id="skip-retry"><a class="header" href="#skip-retry">Skip Retry</a></h2>
+<p>If <code>Handler.ProcessTask</code> returns a <code>SkipRetry</code> error, the task will be archived regardless of the number of remaining retry count.
+The returned error can be <code>SkipRetry</code> or an error which wraps the <code>SkipRetry</code> error.</p>
+<pre><code class="language-go">func ExampleHandler(ctx context.Context, task *asynq.Task) error {
+    // Task handling logic here...
+    // If the handler knows that the task does not need a retry, then return SkipRetry
+    return fmt.Errorf(&quot;&lt;reason for skipping retry&gt;: %w&quot;, asynq.SkipRetry)
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><p>In this page, I'll explain how to set timeout or deadline for a task, and how to handle cancelations.</p>
+<h2 id="task-timeout"><a class="header" href="#task-timeout">Task Timeout</a></h2>
+<p>When you enqueue a task with <code>Client</code>, you can specify <a href="https://pkg.go.dev/github.com/hibiken/asynq?tab=doc#Timeout"><code>Timeout</code></a> or <a href="https://pkg.go.dev/github.com/hibiken/asynq?tab=doc#Deadline"><code>Deadline</code></a> as an option, so that if the task doesn't get processed within that timeout or before that deadline, Server can abandon the work to reclaim resources for other tasks.<br />
+These options will set the timeout, deadline value of the <code>context.Context</code>, which gets passed as the first argument to your Handler.</p>
+<p>*Note: The timeout is <strong>relative to the time that Handler started to process the task</strong>. </p>
+<p>For example, if you have a task that should be completed within 30 seconds, you can set the timeout duration to be <code>30*time.Second</code>.</p>
+<pre><code class="language-go">c := asynq.NewClient(asynq.RedisClientOpt{Addr: &quot;:6379&quot;})
+
+err := c.Enqueue(task, asynq.Timeout(30 * time.Second))
+</code></pre>
+<p>If you have a task that should be completed before certain time, you can set the deadline for that task.<br />
+For example, if you have a task that should be completed before <code>2020-12-25</code>, you can pass that as <code>Deadline</code> option.</p>
+<pre><code class="language-go">xmas := time.Date(2020, time.December, 12, 25, 0, 0, 0, time.UTC)
+err := c.Enqueue(task, asynq.Deadline(xmas))
+</code></pre>
+<h2 id="task-context-in-handler"><a class="header" href="#task-context-in-handler">Task Context in Handler</a></h2>
+<p>Now that we've created tasks with <code>Timeout</code> and <code>Deadline</code> option, we have to respect that value by reading <code>Done</code> channel in the context.</p>
+<p>The first argument passed to the <code>Handler</code> is <code>context.Context</code>. You should write your Handler in such a way that it abandons the work if the cancelation signal is received from the context.</p>
+<pre><code class="language-go">func myHandler(ctx context.Context, task *asynq.Task) error {
+    c := make(chan error, 1)
+    go func() {
+        c &lt;- doWork(task)
+    }()
+    select {
+    case &lt;-ctx.Done():
+        // cancelation signal received, abandon this work.
+        return ctx.Err()
+    case res := &lt;-c:
+        return res
+    }   
+}
+</code></pre>
+<h2 id="cancel-tasks-manually-via-cli"><a class="header" href="#cancel-tasks-manually-via-cli">Cancel tasks manually via CLI</a></h2>
+<p><code>asynq</code> CLI has the <code>cancel</code> command which takes the ID of the task to cancel active tasks.<br />
+You can inspect currently active tasks with <code>workers</code> command and grab the ID to cancel a task.</p>
+<pre><code class="language-sh">asynq task ls --queue=myqueue --state=active
+asynq task cancel [task_id]
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>You can run a <code>Scheduler</code> alongside with the <code>Server</code> to process tasks periodically. Scheduler enqueues tasks at regular intervals, that are then executed by available worker servers in the cluster.</p>
+<p>You have to ensure only a single scheduler is running for a schedule at a time, otherwise you’d end up with duplicate tasks. Using a centralized approach means the schedule doesn’t have to be synchronized, and the service can operate without using locks.</p>
+<p>If you need to dynamically add and remove periodic tasks, use <code>PeriodicTaskManager</code> instead of using <code>Scheduler</code> directly. See <a href="./Dynamic-Periodic-Task.html">this wiki</a> page for more details.</p>
+<h2 id="time-zones"><a class="header" href="#time-zones">Time Zones</a></h2>
+<p>The periodic task schedules uses the UTC time zone by default, but you can change the time zone used using the <code>SchedulerOpts</code>.</p>
+<pre><code class="language-go">// Example of using America/Los_Angeles timezone instead of the default UTC timezone.
+loc, err := time.LoadLocation(&quot;America/Los_Angeles&quot;)
+if err != nil {
+    panic(err)
+}
+scheduler := asynq.NewScheduler(
+    redisConnOpt, 
+    &amp;asynq.SchedulerOpts{
+        Location: loc,
+    },
+)
+</code></pre>
+<h2 id="entries"><a class="header" href="#entries">Entries</a></h2>
+<p>To enqueue a task periodically you have to register an entry with the scheduler.</p>
+<pre><code class="language-go">scheduler := asynq.NewScheduler(redisConnOpt, nil)
+
+task := asynq.NewTask(&quot;example_task&quot;, nil)
+
+// You can use cron spec string to specify the schedule. 
+entryID, err := scheduler.Register(&quot;* * * * *&quot;, task)
+if err != nil {
+    log.Fatal(err)
+}
+log.Printf(&quot;registered an entry: %q\n&quot;, entryID)
+
+// You can use &quot;@every &lt;duration&gt;&quot; to specify the interval.
+entryID, err = scheduler.Register(&quot;@every 30s&quot;, task)
+if err != nil {
+    log.Fatal(err)
+}
+log.Printf(&quot;registered an entry: %q\n&quot;, entryID)
+
+// You can also pass options.
+entryID, err = scheduler.Register(&quot;@every 24h&quot;, task, asynq.Queue(&quot;myqueue&quot;))
+if err != nil {
+    log.Fatal(err)
+}
+log.Printf(&quot;registered an entry: %q\n&quot;, entryID)
+</code></pre>
+<h2 id="run-the-scheduler"><a class="header" href="#run-the-scheduler">Run the Scheduler</a></h2>
+<p>To start the scheduler, call <code>Run</code> on the scheduler.</p>
+<pre><code class="language-go">scheduler := asynq.NewScheduler(redisConnOpt, nil)
+
+// ... Register tasks
+
+if err := scheduler.Run(); err != nil {
+    log.Fatal(err)
+}
+</code></pre>
+<p>The call to <code>Run</code> will wait for TERM or INT signal (e.g. Ctrl-C keypress).</p>
+<h2 id="error-handling"><a class="header" href="#error-handling">Error Handling</a></h2>
+<p>You can provide a function to handle an error if the scheduler could not enqueue a task.</p>
+<pre><code class="language-go">func handleEnqueueError(task *asynq.Task, opts []asynq.Option, err error) {
+    // your error handling logic
+}
+
+scheduler := asynq.NewScheduler(
+    redisConnOpt, 
+    &amp;asynq.SchedulerOpts{
+        EnqueueErrorHandler: handleEnqueueError,
+    },
+)
+</code></pre>
+<h2 id="inspection-via-cli"><a class="header" href="#inspection-via-cli">Inspection via CLI</a></h2>
+<p>The CLI has a subcommand <code>cron</code> to inspect scheduler entries.</p>
+<p>To see all entries from the currently running scheduler, you can run:</p>
+<pre><code class="language-sh">asynq cron ls
+</code></pre>
+<p>This command will output a list of entries each with its IDs, Schedule Spec, Next enqueue time, Previous enqueue time.</p>
+<p>You can also see a history of each entry by running:</p>
+<pre><code class="language-sh">asynq cron history &lt;entryID&gt;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="overview-1"><a class="header" href="#overview-1">Overview</a></h2>
+<p>If you'd like to add and remove periodic tasks dynamically (i.e. without restarting the Scheduler process), use <code>PeriodicTaskManager</code>.
+The PeriodicTaskManager uses the <code>PeriodicTaskConfigProvider</code> to fetch the current periodic task configurations periodically and syncs the Scheduler's entries with the current configs.</p>
+<p>For example, you can store your periodic task configurations in a database or a local file and update this config source to dynamically add and remove periodic tasks. The Example below shows how this can be achieved with a local file, but you can easily modify the example to work with a database or other config sources.</p>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<p>In this example, we are going to store the periodic task config in a YAML file.
+The yaml file <code>periodic_task_config.yml</code> looks like this.</p>
+<pre><code class="language-yml">configs:
+  - cronspec: &quot;* * * * *&quot;
+    task_type: foo
+
+  - cronspec: &quot;* * * * *&quot;
+    task_type: bar
+</code></pre>
+<p>Now we need to implement our <code>PeriodicTaskConfigProvider</code> which reads this file and return a list of <code>PeriodicTaskConfig</code>.</p>
+<pre><code class="language-go">func main() {
+    provider := &amp;FileBasedConfigProvider{filename: &quot;./periodic_task_config.yml&quot;}
+
+    mgr, err := asynq.NewPeriodicTaskManager(
+        asynq.PeriodicTaskManagerOpts{
+            RedisConnOpt:               asynq.RedisClientOpt{Addr: &quot;localhost:6379&quot;},
+            PeriodicTaskConfigProvider: provider,         // this provider object is the interface to your config source
+            SyncInterval:               10 * time.Second, // this field specifies how often sync should happen
+    })
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    if err := mgr.Run(); err != nil {
+         log.Fatal(err)
+    }
+}
+
+// FileBasedConfigProvider implements asynq.PeriodicTaskConfigProvider interface.
+type FileBasedConfigProvider struct {
+     filename string
+}
+
+// Parses the yaml file and return a list of PeriodicTaskConfigs.
+func (p *FileBasedConfigProvider) GetConfigs() ([]*asynq.PeriodicTaskConfig, error) {
+    data, err := os.ReadFile(p.filename)
+    if err != nil {
+        return nil, err
+    }
+    var c PeriodicTaskConfigContainer
+    if err := yaml.Unmarshal(data, &amp;c); err != nil {
+        return nil, err
+    }
+    var configs []*asynq.PeriodicTaskConfig
+    for _, cfg := range c.Configs {
+         configs = append(configs, &amp;asynq.PeriodicTaskConfig{Cronspec: cfg.Cronspec, Task: asynq.NewTask(cfg.TaskType, nil)})
+    }
+    return configs, nil
+}
+
+type PeriodicTaskConfigContainer struct {
+    Configs []*Config `yaml:&quot;configs&quot;`
+}
+
+type Config struct {
+    Cronspec string `yaml:&quot;cronspec&quot;`
+    TaskType string `yaml:&quot;task_type&quot;`
+}
+
+</code></pre>
+<p>Run the go program above and while it's running, try changing the config file. You should see log messages which indicate that a new config is added or removed.</p>
+<div style="break-before: page; page-break-before: always;"></div><p>This page shows an example of how to configure asynq Server to rate limit task processing.</p>
+<p><em>Note that this is a per server instance rate limit, and not a global rate limit.</em></p>
+<p>In this example, we are going to use <code>golang.org/x/time/rate</code> package to demonstrate rate limiting.
+The key configuration here is <code>IsFailure</code> and <code>RetryDelayFunc</code> in the config when you initialize your server.
+We are going to create a custom error type and type assert the given error in the <code>IsFailure</code> and <code>RetryDelayFunc</code> functions.</p>
+<pre><code class="language-go">package main
+
+import (
+    &quot;context&quot;
+    &quot;errors&quot;
+    &quot;fmt&quot;
+    &quot;log&quot;
+    &quot;math/rand&quot;
+    &quot;time&quot;
+
+    &quot;golang.org/x/time/rate&quot;
+    &quot;github.com/hibiken/asynq&quot;
+)
+
+func main() {
+    srv := asynq.NewServer(
+        asynq.RedisClientOpt{Addr: &quot;:6379&quot;},
+        asynq.Config{
+            Concurrency:    10,
+            // If error is due to rate limit, don't count the error as a failure.
+            IsFailure:      func(err error) bool { return !IsRateLimitError(err) },
+            RetryDelayFunc: retryDelay,
+        },
+    )
+
+    if err := srv.Run(asynq.HandlerFunc(handler)); err != nil {
+        log.Fatal(err)
+    }
+}
+
+type RateLimitError struct {
+    RetryIn time.Duration
+}
+
+func (e *RateLimitError) Error() string {
+    return fmt.Sprintf(&quot;rate limited (retry in  %v)&quot;, e.RetryIn)
+}
+
+func IsRateLimitError(err error) bool {
+    _, ok := err.(*RateLimitError)
+    return ok
+}
+
+func retryDelay(n int, err error, task *asynq.Task) time.Duration {
+    var ratelimitErr *RateLimitError
+    if errors.As(err, &amp;ratelimitErr) {
+        return ratelimitErr.RetryIn
+    }
+    return asynq.DefaultRetryDelayFunc(n, err, task)
+}
+
+// Rate is 10 events/sec and permits burst of at most 30 events.
+var limiter = rate.NewLimiter(10, 30)
+
+func handler(ctx context.Context, task *asynq.Task) error {
+    if !limiter.Allow() {
+        return &amp;RateLimitError{
+            RetryIn: time.Duration(rand.Intn(10)) * time.Second,
+        }
+    }
+    log.Printf(&quot;[*] processing %s&quot;, task.Payload())
+    return nil
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><p>The unique tasks feature in Asynq make it simple to ensure that you have only one copy of a task enqueued in Redis.<br />
+This feature is useful when you want to deduplicate tasks to ensure that you are not creating redundant work.</p>
+<h2 id="overview-2"><a class="header" href="#overview-2">Overview</a></h2>
+<p>There are two ways you can go about ensuring the uniqueness of tasks with Asynq.</p>
+<ol>
+<li>Using <code>TaskID</code> option: Generate a unique task ID on your own</li>
+<li>Using <code>Unique</code> option: Let Asynq create a uniquness lock for the task</li>
+</ol>
+<h3 id="using-taskid-option"><a class="header" href="#using-taskid-option">Using <code>TaskID</code> option</a></h3>
+<p>If you could go with the first approach, it's guaranteed that at any moment there's only one task with a given task ID. If you try to enqueue another task with the same task ID, you'll get <code>ErrTaskIDConflict</code> error.</p>
+<pre><code class="language-go">// First task should be ok
+_, err := client.Enqueue(task, asynq.TaskID(&quot;mytaskid&quot;))
+
+// Second task will fail, err is ErrTaskIDConflict (assuming that the first task didn't get processed yet)
+_, err = client.Enqueue(task, asynq.TaskID(&quot;mytaskid&quot;))
+</code></pre>
+<h3 id="using-unique-option"><a class="header" href="#using-unique-option">Using <code>Unique</code> option</a></h3>
+<p>The second approach is based on uniqueness locks. When enqueueing a task with <a href="https://pkg.go.dev/github.com/hibiken/asynq?tab=doc#Unique"><code>Unique</code></a> option, <a href="https://pkg.go.dev/github.com/hibiken/asynq?tab=doc#Client"><code>Client</code></a> checks whether if it can acquire a lock for the given task. The task is enqueued only if the lock can be acquired. If there's already another task holding the lock, then the <a href="https://pkg.go.dev/github.com/hibiken/asynq?tab=doc#Client"><code>Client</code></a> will return an error (See example code below on how to inspect the error).</p>
+<p>The uniqueness lock has a TTL associated with it to avoid holding the lock forever.
+The lock will be released after the TTL or if the task holding the lock gets processed successfully before the TTL.<br />
+One important thing to note is that the Asynq's unique task feature is <strong>best-effort uniqueness</strong>. In other words, it's possible to enqueue a duplicate task if the lock has expired before the task gets processed.</p>
+<p>The uniqueness of a task is based on the following properties:</p>
+<ul>
+<li>Type </li>
+<li>Payload</li>
+<li>Queue </li>
+</ul>
+<p>So if there's a task with the same type and payload, and if it's enqueued to the same queue, then another task with these same properties won't be enqueued until the lock has been released.</p>
+<pre><code class="language-go">c := asynq.NewClient(redis)
+
+t1 := asynq.NewTask(&quot;example&quot;, []byte(&quot;hello&quot;))
+
+// t1 will hold the uniqueness lock for the next hour.
+err := c.Enqueue(t1, asynq.Unique(time.Hour))
+switch {
+case errors.Is(err, asynq.ErrDuplicateTask):
+    // handle duplicate task
+case err != nil:
+    // handle other errors
+}
+
+t2 := asynq.NewTask(&quot;example&quot;, []byte(&quot;hello&quot;))
+ 
+// t2 cannot be enqueued because it's a duplicate of t1.
+err = c.Enqueue(t2, asynq.Unique(time.Hour))
+switch {
+case errors.Is(err, asynq.ErrDuplicateTask):
+    // handle duplicate task
+case err != nil:
+    // handle other errors
+}
+</code></pre>
+<p>In the above example, <code>t2</code> won't be enqueued since <code>t2</code> is a duplicate of <code>t1</code>.<br />
+Returned <code>error</code> value can be inspected using <a href="https://golang.org/pkg/errors/#Is"><code>errors.Is</code></a> to see if it wraps <code>asynq.ErrDuplicateTask</code> error.</p>
+<div style="break-before: page; page-break-before: always;"></div><h3 id="task-retention"><a class="header" href="#task-retention">Task Retention</a></h3>
+<p>By default, a task is deleted from the queue once it's successfully processed by <code>Handler</code> (i.e. <code>Handler.ProcessTask</code> returns nil). However, if you'd like to keep the task in the queue after its completion (e.g. for inspection purpose), you can specify a retention period for the task.</p>
+<p>Here is an example of using <code>Retention</code> option to specify task to be kept in the queue for 24h after its completion.</p>
+<pre><code class="language-go">// Set the option at task initialization.
+task := asynq.NewTask(&quot;my_task&quot;, payload, asynq.Retention(24 * time.Hour))
+
+// Or alternatively, set the option at enqueue time.
+info, err := client.Enqueue(task, asynq.Retention(24 * time.Hour))
+</code></pre>
+<p>With this option set, you should be able to see the completed task using the CLI or Web UI.</p>
+<h3 id="task-result"><a class="header" href="#task-result">Task Result</a></h3>
+<p>If you'd like to store some data associated with a task when it's processed, and if the data is only needed during the lifetime of the task (i.e. until it's deleted from the queue), then you can simply store the data with the task.</p>
+<p>Use <code>ResultWriter</code> to write the data to redis so that the written data is associated with the task.</p>
+<p><em>Note: Be cautious of the amount of data you write to redis, if the data you need to store is large, it maybe better to use a disk-based storage system like a SQL database.</em></p>
+<pre><code class="language-go">// In handler code.
+func MyHandler(ctx context.Context, task *asynq.Task) error {
+    res, err := DoStuff(ctx, task)
+    if err != nil {
+        return fmt.Errorf(&quot;failed to process task: %v&quot;, err)
+    }
+    if _, err = task.ResultWriter().Write(res); err != nil {
+        return fmt.Errorf(&quot;failed to write task result: %v&quot;, err)
+    }
+    return nil
+}
+</code></pre>
+<p>If you use this in conjunction with the <code>Retention</code> option shown above, you'll be able to see the result data via CLI and Web UI.
+Also, the result data is accessible programmatically by using <code>Inspector.GetTaskInfo</code> and <code>Inspector.ListCompletedTasks</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><p>This page describes Asynq's task aggregation feature.</p>
+<h2 id="overview-3"><a class="header" href="#overview-3">Overview</a></h2>
+<p>Task aggregation allows you to enqueue multiple tasks successively, and have them passed to the <code>Handler</code> together rather than individually.
+The feature allows you to batch multiple successive operations into one, in order to save on costs, optimize caching, or batch notifications, for example.</p>
+<h2 id="how-it-works"><a class="header" href="#how-it-works">How it works</a></h2>
+<p>In order to use the task aggregation feature, you need to enqueue the tasks in the same queue with the common <strong>group name</strong>.
+Tasks enqueued with the same <code>(queue, group)</code> pairs are aggregated into one task by <strong><code>GroupAggregator</code></strong> that you provide and the aggregated task will be passed to the handler.</p>
+<p>When creating an aggregated task, Asynq server will wait for more tasks until a configurable <strong>grace period</strong>. The grace period is renewed whenever you enqueue a new task with the same <code>(queue, group)</code>.</p>
+<p>The grace period has configurable upper bound: you can set a <strong>maximum aggregation delay</strong>, after which Asynq server will aggregate the tasks regardless of the remaining grace period.</p>
+<p>You can also set a <strong>maximum number of tasks</strong> that can be aggregated together. If that number is reached, Asynq server will aggregate the tasks immediately.</p>
+<p><strong>Note</strong>: Scheduling and aggregation of tasks are conflicting features and scheduling takes silent priority over aggregation.</p>
+<h2 id="quick-example"><a class="header" href="#quick-example">Quick Example</a></h2>
+<p>On the client side, use <code>Queue</code> and <code>Group</code> option to enqueue the task in the same group.</p>
+<pre><code class="language-go">// Enqueue three tasks to the same group.
+client.Enqueue(task1, asynq.Queue(&quot;notifications&quot;), asynq.Group(&quot;user1:email&quot;))
+client.Enqueue(task2, asynq.Queue(&quot;notifications&quot;), asynq.Group(&quot;user1:email&quot;))
+client.Enqueue(task3, asynq.Queue(&quot;notifications&quot;), asynq.Group(&quot;user1:email&quot;))
+</code></pre>
+<p>On the server side, provide <code>GroupAggregator</code> to enable task aggregation feature.
+You can optionally configure <code>GroupGracePeriod</code>, <code>GroupMaxDelay</code>, and <code>GroupMaxSize</code> to customize the aggregation policy.</p>
+<pre><code class="language-go">// This function is used to aggregate multiple tasks into one.
+func aggregate(group string, tasks []*asynq.Task) *asynq.Task {
+    // ... Your logic to aggregate the given tasks and return the aggregated task.
+    // ... Use NewTask(typename, payload, opts...) to create a new task and set options if needed.
+    // ... (Note) Queue option will be ignored and the aggregated task will always be enqueued to the same queue the group belonged.
+}
+
+srv := asynq.NewServer(
+           redisConnOpt,
+           asynq.Config{
+               GroupAggregator:  asynq.GroupAggregatorFunc(aggregate),
+               GroupMaxDelay:    10 * time.Minute,
+               GroupGracePeriod: 2 * time.Minute,
+               GroupMaxSize:     20,
+               Queues: map[string]int{&quot;notifications&quot;: 1},
+           },
+       )
+</code></pre>
+<h2 id="tutorial"><a class="header" href="#tutorial">Tutorial</a></h2>
+<p>In this section, we provide a simple programs to see the aggregation feature in action.</p>
+<p>First, create a client program with the following:</p>
+<pre><code class="language-go">// client.go
+package main
+
+import (
+        &quot;flag&quot;
+        &quot;log&quot;
+
+        &quot;github.com/hibiken/asynq&quot;
+)
+
+var (
+       flagRedisAddr = flag.String(&quot;redis-addr&quot;, &quot;localhost:6379&quot;, &quot;Redis server address&quot;)
+       flagMessage = flag.String(&quot;message&quot;, &quot;hello&quot;, &quot;Message to print when task gets processed&quot;)
+)
+
+func main() {
+        flag.Parse()
+
+        c := asynq.NewClient(asynq.RedisClientOpt{Addr: *flagRedisAddr})
+        defer c.Close()
+
+        task := asynq.NewTask(&quot;aggregation-tutorial&quot;, []byte(*flagMessage))
+        info, err := c.Enqueue(task, asynq.Queue(&quot;tutorial&quot;), asynq.Group(&quot;example-group&quot;))
+        if err != nil {
+                log.Fatalf(&quot;Failed to enqueue task: %v&quot;, err)
+        }
+        log.Printf(&quot;Successfully enqueued task: %s&quot;, info.ID)
+}
+</code></pre>
+<p>You can run this program a few times:</p>
+<pre><code class="language-sh">$ go build -o client client.go 
+$ ./client --redis-addr=&lt;REDIS_SERVER_ADDR&gt;
+$ ./client --message=hi --redis-addr=&lt;REDIS_SERVER_ADDR&gt;
+$ ./client --message=bye --redis-addr=&lt;REDIS_SERVER_ADDR&gt;
+</code></pre>
+<p>Now if you inspect the queue via CLI or Web UI, you can see that you have <strong>aggregating</strong> tasks in the queue.</p>
+<p>Next, create a server program with the following:</p>
+<pre><code class="language-go">// server.go
+package main
+
+import (
+        &quot;context&quot;
+        &quot;flag&quot;
+        &quot;log&quot;
+        &quot;strings&quot;
+        &quot;time&quot;
+
+        &quot;github.com/hibiken/asynq&quot;
+)
+
+var (
+        flagRedisAddr = flag.String(&quot;redis-addr&quot;, &quot;localhost:6379&quot;, &quot;Redis server address&quot;)
+        flagGroupGracePeriod = flag.Duration(&quot;grace-period&quot;, 10*time.Second, &quot;Group grace period&quot;)
+        flagGroupMaxDelay = flag.Duration(&quot;max-delay&quot;, 30*time.Second, &quot;Group max delay&quot;)
+        flagGroupMaxSize = flag.Int(&quot;max-size&quot;, 20, &quot;Group max size&quot;)
+)
+
+// Simple aggregation function.
+// Combines all tasks messages, each message on a separate line.
+func aggregate(group string, tasks []*asynq.Task) *asynq.Task {
+        log.Printf(&quot;Aggregating %d tasks from group %q&quot;, len(tasks), group)
+        var b strings.Builder
+        for _, t := range tasks {
+                b.Write(t.Payload())
+                b.WriteString(&quot;\n&quot;)
+        }
+        return asynq.NewTask(&quot;aggregated-task&quot;, []byte(b.String()))
+}
+
+func handleAggregatedTask(ctx context.Context, task *asynq.Task) error {
+        log.Print(&quot;Handler received aggregated task&quot;)
+        log.Printf(&quot;aggregated messags: %s&quot;, task.Payload())
+        return nil
+}
+
+func main() {
+        flag.Parse()
+
+        srv := asynq.NewServer(
+                asynq.RedisClientOpt{Addr: *flagRedisAddr},
+                asynq.Config{
+                        Queues:           map[string]int{&quot;tutorial&quot;: 1},
+                        GroupAggregator:  asynq.GroupAggregatorFunc(aggregate),
+                        GroupGracePeriod: *flagGroupGracePeriod,
+                        GroupMaxDelay:    *flagGroupMaxDelay,
+                        GroupMaxSize:     *flagGroupMaxSize,
+                },
+        )
+
+        mux := asynq.NewServeMux()
+        mux.HandleFunc(&quot;aggregated-task&quot;, handleAggregatedTask)
+
+        if err := srv.Run(mux); err != nil {
+                log.Fatalf(&quot;Failed to start the server: %v&quot;, err)
+        }
+}
+</code></pre>
+<p>You can run this program and observe the output:</p>
+<pre><code class="language-sh">$ go build -o server server.go
+$ ./server --redis-addr=&lt;REDIS_SERVER_ADDR&gt;
+</code></pre>
+<p>You should be able to see in the output that the server has aggregated the tasks in the group and handler processed the aggregated task.
+Feel free to play around with <code>--grace-period</code>, <code>--max-delay</code> and <code>--max-size</code> flags in the above program to see how it affects the aggregation policy.</p>
+<div style="break-before: page; page-break-before: always;"></div><p>This wiki page describes how to use Redis Cluster as a message broker with Asynq.
+This wiki assumes that you've read <a href="https://redis.io/topics/cluster-tutorial">Redis Cluster Tutorial</a>, and you have 6 instance Redis Cluster running locally as described in the tutorial.</p>
+<h3 id="advantages-of-using-redis-cluster"><a class="header" href="#advantages-of-using-redis-cluster">Advantages of using Redis Cluster</a></h3>
+<p>With Redis cluster, you get</p>
+<ul>
+<li>Ability to easily shard data across multiple Redis nodes</li>
+<li>Ability to stay available when some nodes are failing</li>
+<li>Ability to automatically failover</li>
+</ul>
+<h3 id="overview-4"><a class="header" href="#overview-4">Overview</a></h3>
+<p><img src="https://github.com/hibiken/asynq/raw/master/docs/assets/cluster.png" alt="Cluster Queue Diagram" /></p>
+<p>Asynq shards data by queue.<br />
+In the above diagram, we have 6-instance Redis Cluster (3 masters, 3 slaves) and 4 queues (q1, q2, q3, q4).</p>
+<ul>
+<li>Master1 (and its replica Slave1) hosts q1 and q2.</li>
+<li>Master2 (and its replica Slave2) hosts q3.</li>
+<li>Master3 (and its replica Slave3) hosts q4.</li>
+</ul>
+<p>When you enqueue a task using <code>asynq.Client</code> you can specify the queue with the <code>Queue</code> option.<br />
+The enqueued tasks will be consumed by <code>asynq.Server</code>(s) that are pulling tasks from those queues.</p>
+<h3 id="tutorial-1"><a class="header" href="#tutorial-1">Tutorial</a></h3>
+<p>In this section, we are going to look at how to use Redis Cluster as a message broker with Asynq.<br />
+We assume that you are running 6-instance Redis cluster on port 7000-7005 as described in this <a href="https://redis.io/topics/cluster-tutorial">Redis Cluster Tutorial</a>.<br />
+Here's an example <code>redis.conf</code> file:</p>
+<pre><code class="language-txt">port 7000
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 5000
+appendonly yes
+</code></pre>
+<p>Next, we are going to create two binaries: client and worker.</p>
+<pre><code class="language-sh">go mod init asynq-redis-cluster-quickstart
+mkdir client worker
+touch client/client.go worker/worker.go
+</code></pre>
+<p>In <code>client.go</code>, we are going to create a new <code>asynq.Client</code> and specify how to connect to Redis Cluster by passing <code>RedisClusterClientOpt</code>.</p>
+<pre><code class="language-go">client := asynq.NewClient(asynq.RedisClusterClientOpt{
+    Addrs: []string{&quot;:7000&quot;, &quot;:7001&quot;, &quot;:7002&quot;, &quot;:7003&quot;, &quot;:7004&quot;, &quot;:7005&quot;},
+})
+</code></pre>
+<p>Once we have the client, we are going to create tasks and enqueue them to three different queues: </p>
+<ul>
+<li>notifications</li>
+<li>webhooks</li>
+<li>images</li>
+</ul>
+<pre><code class="language-go">// client.go
+
+package main
+
+import (
+    &quot;fmt&quot;
+    &quot;log&quot;
+
+    &quot;github.com/hibiken/asynq&quot;
+)
+
+// List of queue names.
+const (
+     QueueNotifications = &quot;notifications&quot;
+     QueueWebhooks      = &quot;webhooks&quot;
+     QueueImages        = &quot;images&quot;
+)
+
+func main() {
+    client := asynq.NewClient(asynq.RedisClusterClientOpt{
+        Addrs: []string{&quot;:7000&quot;, &quot;:7001&quot;, &quot;:7002&quot;, &quot;:7003&quot;, &quot;:7004&quot;, &quot;:7005&quot;},
+    })
+    defer client.Close()
+
+    // Create &quot;notifications:email&quot; task and enqueue it to &quot;notifications&quot; queue.
+    task := asynq.NewTask(&quot;notifications:email&quot;, map[string]interface{}{&quot;to&quot;: 123, &quot;from&quot;: 456})
+    res, err := client.Enqueue(task, asynq.Queue(QueueNotifications))
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Printf(&quot;successfully enqueued: %+v\n&quot;, res)
+
+    // Create &quot;webhooks:sync&quot; task and enqueue it to &quot;webhooks&quot; queue.
+    task = asynq.NewTask(&quot;webhooks:sync&quot;, map[string]interface{}{&quot;data&quot;: 123})
+    res, err = client.Enqueue(task, asynq.Queue(QueueWebhooks))
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Printf(&quot;successfully enqueued: %+v\n&quot;, res)
+
+    // Create &quot;images:resize&quot; task and enqueue it to &quot;images&quot; queue.
+    task = asynq.NewTask(&quot;images:resize&quot;, map[string]interface{}{&quot;src&quot;: &quot;some/path/to/image&quot;})
+    res, err = client.Enqueue(task, asynq.Queue(QueueImages))
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Printf(&quot;successfully enqueued: %+v\n&quot;, res)
+}
+</code></pre>
+<p>Let's run this to enqueue three tasks.</p>
+<pre><code class="language-sh">go run client/client.go
+</code></pre>
+<p>Now let's move on to the worker to consume those tasks.
+In <code>worker.go</code>, we are going to create a <code>asynq.Server</code> that consumes tasks from the three queues.
+Again, we'll use <code>RedisClusterClientOpt</code> to connect to our Redis Cluster.</p>
+<pre><code class="language-go">// worker.go
+
+package main
+
+import (
+    &quot;context&quot;
+    &quot;fmt&quot;
+    &quot;log&quot;
+
+    &quot;github.com/hibiken/asynq&quot;
+)
+
+func main() {
+    redisConnOpt := asynq.RedisClusterClientOpt{
+        Addrs: []string{&quot;:7000&quot;, &quot;:7001&quot;, &quot;:7002&quot;, &quot;:7003&quot;, &quot;:7004&quot;, &quot;:7005&quot;},
+    }
+
+    srv := asynq.NewServer(redisConnOpt, asynq.Config{
+        Concurrency: 20,
+        // we'll give each queue the same priority number here.
+        Queues: map[string]int{
+            &quot;notifications&quot;: 1,
+            &quot;webhooks&quot;:      1,
+            &quot;images&quot;:        1,
+        },
+    })
+
+    mux := asynq.NewServeMux()
+    mux.HandleFunc(&quot;notifications:email&quot;, handleEmailTask)
+    mux.HandleFunc(&quot;webhooks:sync&quot;, handleWebhookSyncTask)
+    mux.HandleFunc(&quot;images:resize&quot;, handleImageResizeTask)
+
+    if err := srv.Run(mux); err != nil {
+        log.Fatalf(&quot;Could not start a server: %v&quot;, err)
+    }
+}
+
+func handleEmailTask(ctx context.Context, t *asynq.Task) error {
+    to, err := t.Payload.GetInt(&quot;to&quot;)
+    if err != nil {
+        return err
+    }
+    from, err := t.Payload.GetInt(&quot;from&quot;)
+    if err != nil {
+        return err
+    }
+    fmt.Printf(&quot;Send email from %d to %d\n&quot;, from, to)
+    return nil
+}
+
+func handleWebhookSyncTask(ctx context.Context, t *asynq.Task) error {
+    data, err := t.Payload.GetInt(&quot;data&quot;)
+    if err != nil {
+        return err
+    }
+    fmt.Printf(&quot;Handle webhook task: %d\n&quot;, data)
+    return nil
+}
+
+func handleImageResizeTask(ctx context.Context, t *asynq.Task) error {
+    src, err := t.Payload.GetString(&quot;src&quot;)
+    if err != nil {
+        return err
+    }
+    fmt.Printf(&quot;Resize image: %s\n&quot;, src)
+    return nil
+}
+</code></pre>
+<p>Let's run this worker server to processed the three tasks we created earlier.</p>
+<pre><code class="language-sh">go run worker/worker.go
+</code></pre>
+<p>You should be able to see the message printed from each handler.</p>
+<h3 id="redis-nodes-and-queues"><a class="header" href="#redis-nodes-and-queues">Redis Nodes and Queues</a></h3>
+<p>As described in the overview section, Asynq shards data by queue. All tasks enqueued to the same queue belongs to the same Redis node.<br />
+But which Redis node hosts which queues?</p>
+<p>We can use CLI to answer that question.</p>
+<pre><code class="language-sh">asynq queue ls --cluster
+</code></pre>
+<p>This command will print a list of queues along with:</p>
+<ul>
+<li>cluster nodes the queue belongs to</li>
+<li>cluster hash slot the queue maps to</li>
+</ul>
+<p>The output may look something like this:</p>
+<pre><code class="language-sh">Queue          Cluster KeySlot  Cluster Nodes
+-----          ---------------  -------------
+images         9450             [{d54231bccd6c1765ea15caf95a41c67b10b91e58 127.0.0.1:7001} {70a7d4569eac28eed577ee91863703ffab98d2e0 127.0.0.1:7005}]
+webhooks       4418             [{d58959f6057ad0911d92d86d1d16dc2242e9ec48 127.0.0.1:7004} {e2fb9f1296a8d3a49818e0f9be3bfd74fdc052ea 127.0.0.1:7000}]
+notifications  16340            [{c738a8a98c5f5f9161e9563fa739f9c8191b7f1a 127.0.0.1:7002} {18cdaa0712191d74656f08017371df41eeaad5fa 127.0.0.1:7003}]
+</code></pre>
+<p>You can run <code>redis-cli --cluster reshard</code> command to move queue from one node to another. Note that operations may become unavailable for some time during resharding since Asynq uses multi-key operations.</p>
+<hr />
+<p>This was a quick walkthrough of how to use Redis Cluster with Asynq.
+If you have any questions or feature requests, please create an issue on Github.
+Thank you!</p>
+<div style="break-before: page; page-break-before: always;"></div><p>This page explains how to configure asynq to take advantage of <a href="https://redis.io/topics/sentinel">Redis Sentinel</a> to avoid downtime due to Redis failure.</p>
+<h3 id="prerequisite"><a class="header" href="#prerequisite">Prerequisite</a></h3>
+<p>Please read the doc on <a href="https://redis.io/topics/sentinel">Redis Sentinel</a> to understand the topic.</p>
+<h3 id="configuring-asynq-to-use-redis-sentinels"><a class="header" href="#configuring-asynq-to-use-redis-sentinels">Configuring Asynq to use Redis Sentinels</a></h3>
+<p>Configuring <code>asynq</code>'s <code>Client</code> and <code>Server</code> to use Redis Sentinel is simple. 
+Use <code>RedisFailoverClientOpt</code> to speicfy the name of your Redis master and addresses of your Redis Sentinels.</p>
+<pre><code class="language-go">var redis = &amp;asynq.RedisFailoverClientOpt{
+    MasterName:    &quot;mymaster&quot;,
+    SentinelAddrs: []string{&quot;localhost:5000&quot;, &quot;localhost:5001&quot;, &quot;localhost:5002&quot;},
+}
+</code></pre>
+<p>And pass this client option to <code>NewClient</code> and <code>NewBackground</code> to create an instance that uses Redis Sentinels.</p>
+<pre><code class="language-go">client := asynq.NewClient(redis)
+
+// ...
+
+srv := asynq.NewServer(redis, asynq.Config{ Concurrency: 10 })
+</code></pre>
+<p>With this setup, when your Redis master goes down, Sentinels will start a failover process and <code>asynq</code> will be notified of the new master and background task processing will continue to work 👍.</p>
+<div style="break-before: page; page-break-before: always;"></div><p>We recommend using a monitoring tool such as <a href="https://prometheus.io/">Prometheus</a> to monitor your worker processes and queues in production.</p>
+<h2 id="queue-metrics"><a class="header" href="#queue-metrics">Queue metrics</a></h2>
+<p>If you are using the <a href="https://github.com/hibiken/asynqmon">Web UI</a>, you can enable integration with Prometheus by passing two flags:</p>
+<ul>
+<li><code>--enable-metrics-exporter</code>: Enable collection of queue metrics and exports it under <code>/metrics</code> endpoint.</li>
+<li><code>--prometheus-addr</code>: Enable visualization of queue metrics within Web UI.</li>
+</ul>
+<p>The queue metrics page looks like this:</p>
+<img width="60%" alt="Screen Shot 2021-12-19 at 4 37 19 PM" src="https://user-images.githubusercontent.com/10953044/146777420-cae6c476-bac6-469c-acce-b2f6584e8707.png">
+<p>If you are not using the Web UI, Asynq ships with <a href="https://github.com/hibiken/asynq/tree/master/tools/metrics_exporter">a binary</a> you can run to export queue metrics. It also has a package to collect queue metrics under <a href="https://github.com/hibiken/asynq/tree/master/x/metrics"><code>x/metrics</code></a>.</p>
+<h2 id="worker-metrics"><a class="header" href="#worker-metrics">Worker metrics</a></h2>
+<p>Asynq <code>Handler</code> interface and <code>ServeMux</code> can be instrumented with metrics tracking code.</p>
+<p>Here is an example of using <a href="https://prometheus.io">Prometheus</a> to export worker metrics.
+We can instrument our code to track additional application specific metrics as well as the default metrics (e.g. memory, cpu) tracked by prometheus.</p>
+<p>Application specific metrics we are tracking in the example code below:</p>
+<ul>
+<li>Total Number of tasks processed by the worker process (both successfully and failed)</li>
+<li>Number of failed tasks by the worker process</li>
+<li>Number of tasks currently being processed by the worker process.</li>
+</ul>
+<pre><code class="language-go">package main
+
+import (
+    &quot;context&quot;
+    &quot;log&quot;
+    &quot;net/http&quot;
+    &quot;os&quot;
+    &quot;os/signal&quot;
+    &quot;runtime&quot;
+
+    &quot;github.com/hibiken/asynq&quot;
+    &quot;github.com/hibiken/asynq/examples/tasks&quot;
+    &quot;github.com/prometheus/client_golang/prometheus&quot;
+    &quot;github.com/prometheus/client_golang/prometheus/promauto&quot;
+    &quot;github.com/prometheus/client_golang/prometheus/promhttp&quot;
+    &quot;golang.org/x/sys/unix&quot;
+)
+
+// Metrics variables.
+var (
+    processedCounter = promauto.NewCounterVec(
+        prometheus.CounterOpts{
+            Name: &quot;processed_tasks_total&quot;,
+            Help: &quot;The total number of processed tasks&quot;,
+        },
+        []string{&quot;task_type&quot;},
+    )
+
+    failedCounter = promauto.NewCounterVec(
+        prometheus.CounterOpts{
+            Name: &quot;failed_tasks_total&quot;,
+	    Help: &quot;The total number of times processing failed&quot;,
+	},
+        []string{&quot;task_type&quot;},
+    )
+
+    inProgressGauge = promauto.NewGaugeVec(
+        prometheus.GaugeOpts{
+	    Name: &quot;in_progress_tasks&quot;,
+	    Help: &quot;The number of tasks currently being processed&quot;,
+	},
+        []string{&quot;task_type&quot;},
+    )
+)
+
+func metricsMiddleware(next asynq.Handler) asynq.Handler {
+    return asynq.HandlerFunc(func(ctx context.Context, t *asynq.Task) error {
+        inProgressGauge.WithLabelValues(t.Type()).Inc()
+        err := next.ProcessTask(ctx, t)
+        inProgressGauge.WithLabelValues(t.Type()).Dec()
+	if err != nil {
+	    failedCounter.WithLabelValues(t.Type()).Inc()
+	}
+	processedCounter.WithLabelValues(t.Type()).Inc()
+	return err
+    })
+}
+
+func main() {
+    httpServeMux := http.NewServeMux()
+    httpServeMux.Handle(&quot;/metrics&quot;, promhttp.Handler())
+    metricsSrv := &amp;http.Server{
+        Addr:    &quot;:2112&quot;,
+	Handler: httpServeMux,
+    }
+    done := make(chan struct{})
+
+    // Start metrics server.
+    go func() {
+        err := metricsSrv.ListenAndServe()
+	if err != nil &amp;&amp; err != http.ErrServerClosed {
+	    log.Printf(&quot;Error: metrics server error: %v&quot;, err)
+	}
+	close(done)
+    }()
+
+    srv := asynq.NewServer(
+        asynq.RedisClientOpt{Addr: &quot;:6379&quot;},
+	asynq.Config{Concurrency: 20},
+    )
+
+    mux := asynq.NewServeMux()
+    mux.Use(metricsMiddleware)
+    mux.HandleFunc(tasks.TypeEmail, tasks.HandleEmailTask)
+
+    // Start worker server.
+    if err := srv.Start(mux); err != nil {
+        log.Fatalf(&quot;Failed to start worker server: %v&quot;, err)
+    }
+
+    // Wait for termination signal.
+    sigs := make(chan os.Signal, 1)
+    signal.Notify(sigs, unix.SIGTERM, unix.SIGINT)
+    &lt;-sigs
+ 	
+    // Stop worker server.
+    srv.Shutdown()
+	
+    // Stop metrics server.
+    if err := metricsSrv.Shutdown(context.Background()); err != nil {
+        log.Printf(&quot;Error: metrics server shutdown error: %v&quot;, err)
+    }
+    &lt;-done
+}
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
