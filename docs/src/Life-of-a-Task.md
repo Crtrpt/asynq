@@ -34,7 +34,7 @@ The only difference between `task2` and `task1` in the example is that `task2` w
 `task3` is enqueued with a `Retention` option of 2 hours. This means that after task3 gets processed successfully by a worker, the task will remain in the queue in the **completed** state for 2 hours before it gets deleted from the queue. By default, if a task doesn't have retention option set, the task will be deleted immediately after completion.
 
 The diagram below shows the state transitions. 
-```
+```txt
 +-------------+            +--------------+          +--------------+           +-------------+
 |             |            |              |          |              | Success   |             |
 |  Scheduled  |----------->|   Pending    |--------->|    Active    |---------> |  Completed  |

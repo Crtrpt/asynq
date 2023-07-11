@@ -4,7 +4,7 @@ You can run a `Scheduler` alongside with the `Server` to process tasks periodica
 
 You have to ensure only a single scheduler is running for a schedule at a time, otherwise you’d end up with duplicate tasks. Using a centralized approach means the schedule doesn’t have to be synchronized, and the service can operate without using locks.
 
-If you need to dynamically add and remove periodic tasks, use `PeriodicTaskManager` instead of using `Scheduler` directly. See [this wiki](https://github.com/hibiken/asynq/wiki/Dynamic-Periodic-Task) page for more details.
+If you need to dynamically add and remove periodic tasks, use `PeriodicTaskManager` instead of using `Scheduler` directly. See [this wiki](./Dynamic-Periodic-Task.md) page for more details.
 
 ## Time Zones
 
@@ -94,7 +94,7 @@ The CLI has a subcommand `cron` to inspect scheduler entries.
 
 To see all entries from the currently running scheduler, you can run:
 
-```
+```sh
 asynq cron ls
 ```
 
@@ -102,7 +102,7 @@ This command will output a list of entries each with its IDs, Schedule Spec, Nex
 
 You can also see a history of each entry by running:
 
-```
+```sh
 asynq cron history <entryID>
 ```
 

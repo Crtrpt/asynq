@@ -88,7 +88,7 @@ func main() {
 
 You can run this program a few times:
 
-```
+```sh
 $ go build -o client client.go 
 $ ./client --redis-addr=<REDIS_SERVER_ADDR>
 $ ./client --message=hi --redis-addr=<REDIS_SERVER_ADDR>
@@ -163,7 +163,7 @@ func main() {
 
 You can run this program and observe the output:
 
-```
+```sh
 $ go build -o server server.go
 $ ./server --redis-addr=<REDIS_SERVER_ADDR>
 ```

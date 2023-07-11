@@ -26,7 +26,7 @@ In this section, we are going to look at how to use Redis Cluster as a message b
 We assume that you are running 6-instance Redis cluster on port 7000-7005 as described in this [Redis Cluster Tutorial](https://redis.io/topics/cluster-tutorial).  
 Here's an example `redis.conf` file:
 
-```
+```txt
 port 7000
 cluster-enabled yes
 cluster-config-file nodes.conf
