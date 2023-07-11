@@ -60,7 +60,7 @@ jobs:
       run: bash ci/spellcheck.sh list
     - name: Lint for local file paths
       run: |
-        mdbook build
+        mdbook build  docs
         cargo run --bin lfp docs/src
     - name: Validate references
       run: bash ci/validate.sh
