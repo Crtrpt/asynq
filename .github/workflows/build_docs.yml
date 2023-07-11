@@ -23,4 +23,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/book
       - name: ls
-        run: "ls /docs/book"
+        run: ls ./docs/book
