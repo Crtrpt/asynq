@@ -24,8 +24,8 @@ jobs:
         rustup --version
         rustc -Vv
         mdbook --version
-    - name: Run tests
-      run: mdbook test
+    - name: Run tests 
+      run: mdbook test docs
   lint:
     name: Run lints
     runs-on: ubuntu-latest
